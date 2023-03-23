@@ -2,6 +2,7 @@ package cn.tedu.fitnessClub.pojo.dto;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -16,6 +17,7 @@ public class ArticleCategoryAddNewDTO implements Serializable {
     /**
      * 文章类别名称
      */
+    @NotNull(message = "添加文章类别失败，必须提交文章类别名称！")
     private String name;
 
     /**

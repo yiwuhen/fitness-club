@@ -2,6 +2,7 @@ package cn.tedu.fitnessClub.pojo.dto;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
