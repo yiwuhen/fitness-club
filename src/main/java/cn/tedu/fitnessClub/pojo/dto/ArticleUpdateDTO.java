@@ -19,6 +19,11 @@ public class ArticleUpdateDTO implements Serializable {
     private Long categoryId;
 
     /**
+     * 文章类别名称
+     */
+    private String categoryName;
+
+    /**
      * 文章标题
      */
     private String title;
