@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class ArticleAddNewDTO implements Serializable {
 
     /**
-     * 类别id
+     * 文章类别id
      */
     private Long categoryId;
 

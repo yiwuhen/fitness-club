@@ -14,7 +14,7 @@ import java.io.Serializable;
 public class ArticleCategoryUpdateDTO implements Serializable {
 
     /**
-     * 类别名称
+     * 文章类别名称
      */
     private String name;
 

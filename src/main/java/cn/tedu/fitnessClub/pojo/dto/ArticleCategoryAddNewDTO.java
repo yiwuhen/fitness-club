@@ -14,12 +14,12 @@ import java.io.Serializable;
 public class ArticleCategoryAddNewDTO implements Serializable {
 
     /**
-     * 类别名称
+     * 文章类别名称
      */
     private String name;
 
     /**
-     * 父级类别id，如果无父级，则为0
+     * 父级文章类别id，如果无父级，则为0
      */
     private Long parentId;
 

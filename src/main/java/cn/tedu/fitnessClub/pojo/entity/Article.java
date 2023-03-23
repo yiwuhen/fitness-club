@@ -19,7 +19,7 @@ public class Article implements Serializable {
     private Long id;
 
     /**
-     * 类别id
+     * 文章类别id
      */
     private Long categoryId;
 

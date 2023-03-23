@@ -18,22 +18,22 @@ public class ArticlePictureUpdateDTO implements Serializable {
     private Long articleId;
 
     /**
-     * 图片url
+     * 文章图片url
      */
     private String url;
 
     /**
-     * 图片简介
+     * 文章图片简介
      */
     private String description;
 
     /**
-     * 图片宽度，单位：px
+     * 文章图片宽度，单位：px
      */
     private Integer width;
 
     /**
-     * 图片高度，单位：px
+     * 文章图片高度，单位：px
      */
     private Integer height;
 

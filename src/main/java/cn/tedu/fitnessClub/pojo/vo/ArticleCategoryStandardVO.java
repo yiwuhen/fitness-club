@@ -19,17 +19,17 @@ public class ArticleCategoryStandardVO implements Serializable {
     private Long id;
 
     /**
-     * 类别名称
+     * 文章类别名称
      */
     private String name;
 
     /**
-     * 父级类别id，如果无父级，则为0
+     * 父级文章类别id，如果无父级，则为0
      */
     private Long parentId;
 
     /**
-     * 深度，最顶级类别的深度为1，次级为2，以此类推
+     * 深度，最顶级文章类别的深度为1，次级为2，以此类推
      */
     private Integer depth;
 
