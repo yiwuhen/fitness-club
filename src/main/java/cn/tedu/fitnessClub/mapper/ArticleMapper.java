@@ -85,7 +85,7 @@ public interface ArticleMapper {
      * @param categoryId 类别id
      * @return 该类别id对应文章数据列表
      */
-    List<ArticleListItemVO> listByArticleId(Long categoryId);
+    List<ArticleListItemVO> listByCategoryId(Long categoryId);
 
     /**
      * 查询文章数据列表
