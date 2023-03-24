@@ -3,67 +3,62 @@
 
 <mapper namespace="cn.tedu.fitnessClub.mapper.ArticleMapper">
 
-    <!-- int insert(ArticleCategory articleCategory); -->
+    <!-- int insert(Article article); -->
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO bms_article_category (
-            name, parent_id, depth, sort
-            , enable, is_parent, is_display
+        INSERT INTO bms_article (
+            category_id, category_name, title, description, content,  sort
         ) VALUES (
-            #{name}, #{parentId}, #{depth}, #{sort},
-            #{enable}, #{isParent}, #{isDisplay}
+            #{categoryId}, #{categoryName}, #{title}, #{description},
+            #{content}, #{sort}
         )
     </insert>
 
-    <!-- int insertBatch(List<ArticleCategory> articleCategories); -->
+    <!-- int insertBatch(List<Article> articleList); -->
     <insert id="insertBatch" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO bms_article_category (
-            name, parent_id, depth, sort,
-            enable, is_parent, is_display
+        INSERT INTO bms_article (
+            category_id, category_name, title, description, content, sort
         ) VALUES
-        <foreach collection="list" item="category" separator=",">
-            (#{category.name}, #{category.parentId}, #{category.depth}, #{category.sort},
-            #{category.enable}, #{category.isParent}, #{category.isDisplay})
+        <foreach collection="list" item="article" separator=",">
+            (#{article.categoryId}, #{article.categoryName}, #{article.title}, #{article.description},
+            #{article.content}, #{article.sort})
         </foreach>
     </insert>
 
     <!-- int deleteById(Long id); -->
     <delete id="deleteById">
-        DELETE FROM bms_article_category WHERE id=#{id}
+        DELETE FROM bms_article WHERE id=#{id}
     </delete>
 
-    <!-- int deleteByIds(Long ids); -->
+    <!-- int deleteByIds(Long[] ids); -->
     <delete id="deleteByIds">
-        DELETE FROM bms_article_category WHERE id IN (
+        DELETE FROM bms_article WHERE id IN (
             <foreach collection="array" item="id" separator=",">
                 #{id}
             </foreach>
         )
     </delete>
 
-    <!-- int update(ArticleCategory articleCategory); -->
+    <!-- int update(Article article); -->
     <update id="update">
-        UPDATE bms_article_category
+        UPDATE bms_article
         <set>
-            <if test="name != null">
-                name=#{name},
+            <if test="categoryId != null">
+                category_id=#{categoryId},
             </if>
-            <if test="parentId != null">
-                parent_id=#{parentId},
+            <if test="categoryName != null">
+                category_name=#{categoryName},
             </if>
-            <if test="depth != null">
-                depth=#{depth},
+            <if test="title != null">
+                title=#{title},
+            </if>
+            <if test="description != null">
+                description=#{description},
+            </if>
+            <if test="content != null">
+                content=#{content},
             </if>
             <if test="sort != null">
                 sort=#{sort},
-            </if>
-            <if test="enable != null">
-                enable=#{enable},
-            </if>
-            <if test="isParent != null">
-                is_parent=#{isParent},
-            </if>
-            <if test="isDisplay != null">
-                is_display=#{isDisplay},
             </if>
         </set>
         WHERE id=#{id}
@@ -71,90 +66,85 @@
 
     <!-- int count(); -->
     <select id="count" resultType="int">
-        SELECT count(*) FROM bms_article_category
+        SELECT count(*) FROM bms_article
     </select>
 
-    <!-- int countByName(String name); -->
-    <select id="countByName" resultType="int">
-        SELECT count(*) FROM bms_article_category WHERE name=#{name}
+    <!-- int countByCategoryId(Long categoryId); -->
+    <select id="countByCategoryId" resultType="int">
+        SELECT count(*) FROM bms_article WHERE category_id=#{categoryId}
     </select>
 
-    <!-- int countByNameAndNotId(@Param("id") Long id, @Param("name") String name); -->
+    <!-- int countByNameAndNotId(@Param("id") Long id, @Param("name") String title); -->
     <select id="countByNameAndNotId" resultType="int">
-        SELECT count(*) FROM bms_article_category WHERE name=#{name} AND id!=#{id}
+        SELECT count(*) FROM bms_article WHERE title=#{title} AND id!=#{id}
     </select>
 
-    <!-- int countByParentId(Long parentId); -->
-    <select id="countByParentId" resultType="int">
-        SELECT count(*) FROM bms_article_category WHERE parent_id=#{parentId}
-    </select>
-
-    <!-- ArticleCategoryStandardVO getStandardById(Long id); -->
+    <!-- ArticleStandardVO getStandardById(Long id); -->
     <select id="getStandardById" resultMap="StandardResultMap">
         SELECT
             <include refid="StandardQueryFields"/>
         FROM
-        bms_article_category
+        bms_article
         WHERE
             id=#{id}
     </select>
 
-    <!-- List<ArticleCategoryListItemVO> list(); -->
-    <select id="list" resultMap="ListResultMap">
+    <!-- List<ArticleListItemVO> listByCategoryId(Long categoryId); -->
+    <select id="listByCategoryId" resultMap="ListResultMap">
         SELECT
-            <include refid="ListQueryFields"/>
+        <include refid="ListQueryFields"/>
         FROM
-        bms_article_category
+        bms_article
+        WHERE
+        category_id=#{categoryId}
         ORDER BY
-            sort DESC, id DESC
+        sort DESC, id DESC
     </select>
 
-    <!-- List<ArticleCategoryListItemVO> listByParentId(Long parentId); -->
-    <select id="listByParentId" resultMap="ListResultMap">
+    <!-- List<ArticleListItemVO> list(); -->
+    <select id="list" resultMap="ListResultMap">
         SELECT
-            <include refid="ListQueryFields"/>
+        <include refid="ListQueryFields"/>
         FROM
-        bms_article_category
-        WHERE
-            parent_id=#{parentId}
+        bms_article
         ORDER BY
-            sort DESC, id DESC
+        sort DESC, id DESC
     </select>
 
     <sql id="StandardQueryFields">
         <if test="true">
-            id, name, parent_id, depth,
-            sort, enable, is_parent, is_display
+            id,category_id,category_name,title,description,content,view_count,sort
         </if>
     </sql>
-
-    <resultMap id="StandardResultMap" type="cn.tedu.fitnessClub.pojo.vo.ArticleCategoryStandardVO">
-        <id column="id" property="id"/>
-        <result column="name" property="name"/>
-        <result column="parent_id" property="parentId"/>
-        <result column="depth" property="depth"/>
-        <result column="sort" property="sort"/>
-        <result column="enable" property="enable"/>
-        <result column="is_parent" property="isParent"/>
-        <result column="is_display" property="isDisplay"/>
-    </resultMap>
 
     <sql id="ListQueryFields">
         <if test="true">
-            id, name, parent_id, depth,
-            sort, enable, is_parent, is_display
+            id,category_id,category_name,title,description,content,view_count,sort
         </if>
     </sql>
 
-    <resultMap id="ListResultMap" type="cn.tedu.fitnessClub.pojo.vo.ArticleCategoryListItemVO">
+    <resultMap id="StandardResultMap" type="cn.tedu.fitnessClub.pojo.vo.ArticleStandardVO">
         <id column="id" property="id"/>
-        <result column="name" property="name"/>
-        <result column="parent_id" property="parentId"/>
-        <result column="depth" property="depth"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="category_name" property="categoryName"/>
+        <result column="title" property="title"/>
+        <result column="description" property="description"/>
+        <result column="content" property="content"/>
+        <result column="view_count" property="viewCount"/>
         <result column="sort" property="sort"/>
-        <result column="enable" property="enable"/>
-        <result column="is_parent" property="isParent"/>
-        <result column="is_display" property="isDisplay"/>
     </resultMap>
+
+    <resultMap id="ListResultMap" type="cn.tedu.fitnessClub.pojo.vo.ArticleListItemVO">
+        <id column="id" property="id"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="category_name" property="categoryName"/>
+        <result column="title" property="title"/>
+        <result column="description" property="description"/>
+        <result column="content" property="content"/>
+        <result column="view_count" property="viewCount"/>
+        <result column="sort" property="sort"/>
+    </resultMap>
+
+
 
 </mapper>

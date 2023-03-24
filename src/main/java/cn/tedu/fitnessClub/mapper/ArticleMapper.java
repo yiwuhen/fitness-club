@@ -3,6 +3,7 @@ package cn.tedu.fitnessClub.mapper;
 import cn.tedu.fitnessClub.pojo.entity.Article;
 import cn.tedu.fitnessClub.pojo.vo.ArticleListItemVO;
 import cn.tedu.fitnessClub.pojo.vo.ArticleStandardVO;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -70,6 +71,15 @@ public interface ArticleMapper {
      * @return 与此类别id关联的文章数据的数量
      */
     int countByCategoryId(Long categoryId);
+
+    /**
+     * 统计当前表中非此文章id的匹配标题的文章数据的数量
+     *
+     * @param id   当前文章id
+     * @param title 文章标题
+     * @return 当前表中非此文章id的匹配标题的文章数据的数量
+     */
+    int countByNameAndNotId(@Param("id") Long id, @Param("name") String title);
 
     /**
      * 根据id查询文章数据详情
