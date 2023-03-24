@@ -7,7 +7,6 @@ import cn.tedu.fitnessClub.pojo.dto.ArticleCategoryUpdateDTO;
 import cn.tedu.fitnessClub.pojo.entity.ArticleCategory;
 import cn.tedu.fitnessClub.pojo.vo.ArticleCategoryListItemVO;
 import cn.tedu.fitnessClub.pojo.vo.ArticleCategoryStandardVO;
-import cn.tedu.fitnessClub.pojo.vo.ArticleStandardVO;
 import cn.tedu.fitnessClub.restful.ServiceCode;
 import cn.tedu.fitnessClub.service.IArticleCategoryService;
 import lombok.extern.slf4j.Slf4j;

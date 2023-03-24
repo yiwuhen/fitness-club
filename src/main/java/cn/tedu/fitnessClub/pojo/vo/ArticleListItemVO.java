@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
  */
 @Data
 public class ArticleListItemVO implements Serializable {
+
     /**
      * 数据id
      */

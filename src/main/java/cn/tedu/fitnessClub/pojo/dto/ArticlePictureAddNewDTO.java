@@ -11,6 +11,7 @@ import java.io.Serializable;
  */
 @Data
 public class ArticlePictureAddNewDTO implements Serializable {
+
     /**
      * 文章id
      */
