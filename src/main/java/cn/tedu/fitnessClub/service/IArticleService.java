@@ -57,6 +57,14 @@ public interface IArticleService {
     List<ArticleListItemVO> listByCategoryId(Long categoryId);
 
     /**
+     * 根据多个文章类别查询其文章列表
+     *
+     * @param categoryIds 多个文章类别的id
+     * @return 匹配文章类别的文章列表
+     */
+    List<ArticleListItemVO> listByCategoryIds(Long[] categoryIds);
+
+    /**
      * 查询文章列表
      *
      * @return 文章列表

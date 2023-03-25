@@ -99,4 +99,13 @@ public class ArticleController {
         List<ArticleListItemVO> listByCategoryId = articleService.listByCategoryId(categoryId);
         return JsonResult.ok(listByCategoryId);
     }
+
+    @PostMapping("/list-by-categoryIds")
+    @ApiOperation("根据多个文章类别查询文章列表")
+    @ApiOperationSupport(order = 440)
+    public JsonResult<List<ArticleListItemVO>> list(Long[] categoryIds) {
+        log.debug("开始处理【查询文章列表】的请求，无参数");
+        List<ArticleListItemVO> list = articleService.listByCategoryIds(categoryIds);
+        return JsonResult.ok(list);
+    }
 }

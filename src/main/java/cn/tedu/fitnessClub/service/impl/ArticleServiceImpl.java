@@ -125,6 +125,13 @@ public class ArticleServiceImpl implements IArticleService {
     }
 
     @Override
+    public List<ArticleListItemVO> listByCategoryIds(Long[] categoryIds) {
+        log.debug("开始处理【根据多个文章类别查询其文章列表】的业务，无参数");
+        List<ArticleListItemVO> list = articleMapper.listByCategoryIds(categoryIds);
+        return list;
+    }
+
+    @Override
     public List<ArticleListItemVO> list() {
         log.debug("开始处理【查询文章列表】的业务，无参数");
         List<ArticleListItemVO> list = articleMapper.list();

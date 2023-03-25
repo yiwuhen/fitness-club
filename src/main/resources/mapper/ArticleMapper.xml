@@ -5,18 +5,15 @@
 
     <!-- int insert(Article article); -->
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO bms_article (
-            category_id, category_name, title, description, content,  sort
-        ) VALUES (
-            #{categoryId}, #{categoryName}, #{title}, #{description},
-            #{content}, #{sort}
-        )
+        INSERT INTO bms_article (category_id, category_name, title, description, content, sort)
+        VALUES (#{categoryId}, #{categoryName}, #{title}, #{description},
+                #{content}, #{sort})
     </insert>
 
     <!-- int insertBatch(List<Article> articleList); -->
     <insert id="insertBatch" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO bms_article (
-            category_id, category_name, title, description, content, sort
+        category_id, category_name, title, description, content, sort
         ) VALUES
         <foreach collection="list" item="article" separator=",">
             (#{article.categoryId}, #{article.categoryName}, #{article.title}, #{article.description},
@@ -26,15 +23,17 @@
 
     <!-- int deleteById(Long id); -->
     <delete id="deleteById">
-        DELETE FROM bms_article WHERE id=#{id}
+        DELETE
+        FROM bms_article
+        WHERE id = #{id}
     </delete>
 
     <!-- int deleteByIds(Long[] ids); -->
     <delete id="deleteByIds">
         DELETE FROM bms_article WHERE id IN (
-            <foreach collection="array" item="id" separator=",">
-                #{id}
-            </foreach>
+        <foreach collection="array" item="id" separator=",">
+            #{id}
+        </foreach>
         )
     </delete>
 
@@ -60,32 +59,40 @@
 
     <!-- int count(); -->
     <select id="count" resultType="int">
-        SELECT count(*) FROM bms_article
+        SELECT count(*)
+        FROM bms_article
     </select>
 
     <!-- int countByCategoryId(Long categoryId); -->
     <select id="countByCategoryId" resultType="int">
-        SELECT count(*) FROM bms_article WHERE category_id=#{categoryId}
+        SELECT count(*)
+        FROM bms_article
+        WHERE category_id = #{categoryId}
     </select>
 
     <!-- int countByTitle(String title); -->
     <select id="countByTitle" resultType="int">
-        SELECT count(*) FROM bms_article WHERE title=#{title}
+        SELECT count(*)
+        FROM bms_article
+        WHERE title = #{title}
     </select>
 
     <!-- int countByNameAndNotId(@Param("id") Long id, @Param("name") String title); -->
     <select id="countByNameAndNotId" resultType="int">
-        SELECT count(*) FROM bms_article WHERE title=#{title} AND id!=#{id}
+        SELECT count(*)
+        FROM bms_article
+        WHERE title = #{title}
+          AND id != #{id}
     </select>
 
     <!-- ArticleStandardVO getStandardById(Long id); -->
     <select id="getStandardById" resultMap="StandardResultMap">
         SELECT
-            <include refid="StandardQueryFields"/>
+        <include refid="StandardQueryFields"/>
         FROM
         bms_article
         WHERE
-            id=#{id}
+        id=#{id}
     </select>
 
     <!-- List<ArticleListItemVO> listByCategoryId(Long categoryId); -->
@@ -96,6 +103,22 @@
         bms_article
         WHERE
         category_id=#{categoryId}
+        ORDER BY
+        sort DESC, id DESC
+    </select>
+
+    <!-- List<ArticleListItemVO> listByCategoryIds(Long[] categoryIds); -->
+    <select id="listByCategoryIds" resultMap="ListResultMap">
+        SELECT
+        <include refid="ListQueryFields"/>
+        FROM
+        bms_article
+        WHERE
+        category_id in (
+            <foreach collection="array" item="categoryId" separator=",">
+            #{categoryId}
+            </foreach>
+            )
         ORDER BY
         sort DESC, id DESC
     </select>
@@ -143,7 +166,6 @@
         <result column="view_count" property="viewCount"/>
         <result column="sort" property="sort"/>
     </resultMap>
-
 
 
 </mapper>
