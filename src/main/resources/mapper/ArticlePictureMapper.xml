@@ -45,7 +45,7 @@
             <if test="url != null">
                 url=#{url},
             </if>
-            <if test="description != description">
+            <if test="description != null">
                 description=#{description},
             </if>
             <if test="width != null">
