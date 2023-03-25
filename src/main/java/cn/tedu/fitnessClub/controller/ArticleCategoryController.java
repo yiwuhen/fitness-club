@@ -86,6 +86,30 @@ public class ArticleCategoryController {
         return JsonResult.ok();
     }
 
+    @PostMapping("/{id:[0-9]+}/display")
+    @ApiOperation("展示文章类别")
+    @ApiOperationSupport(order = 312)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "文章类别ID", required = true, dataType = "long")
+    })
+    public JsonResult<Void> setDisplay(@PathVariable @Range(min = 1, message = "请提交有效的ID值！") Long id) {
+        log.debug("开始处理【展示文章类别】的请求，参数：{}", id);
+        articleCategoryService.setDisplay(id);
+        return JsonResult.ok();
+    }
+
+    @PostMapping("/{id:[0-9]+}/hidden")
+    @ApiOperation("不展示文章类别")
+    @ApiOperationSupport(order = 313)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "文章类别ID", required = true, dataType = "long")
+    })
+    public JsonResult<Void> setHidden(@PathVariable @Range(min = 1, message = "请提交有效的ID值！") Long id) {
+        log.debug("开始处理【不展示文章类别】的请求，参数：{}", id);
+        articleCategoryService.setHidden(id);
+        return JsonResult.ok();
+    }
+
     @PostMapping("/{id:[0-9]+}/update")
     @ApiOperation("修改文章类别详情")
     @ApiOperationSupport(order = 300)
