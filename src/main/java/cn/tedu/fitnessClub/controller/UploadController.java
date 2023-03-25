@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/upload")
-@Api(tags = "02. 图片上传模块")
+@Api(tags = "04. 图片上传模块")
 @Slf4j
 public class UploadController {
     @Autowired

@@ -65,6 +65,14 @@ public interface ArticleMapper {
     int count();
 
     /**
+     * 根据文章标题统计数据的数量
+     *
+     * @param title 文章标题
+     * @return 匹配文章标题的文章数据的数量
+     */
+    int countByTitle(String title);
+
+    /**
      * 根据类别id统计文章图片数据的数量
      *
      * @param categoryId 类别id
@@ -79,7 +87,7 @@ public interface ArticleMapper {
      * @param title 文章标题
      * @return 当前表中非此文章id的匹配标题的文章数据的数量
      */
-    int countByNameAndNotId(@Param("id") Long id, @Param("name") String title);
+    int countByNameAndNotId(@Param("id") Long id, @Param("title") String title);
 
     /**
      * 根据id查询文章数据详情

@@ -15,6 +15,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -30,6 +31,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/articleCategories")
+@Validated
 public class ArticleCategoryController {
 
     @Autowired
@@ -113,6 +115,15 @@ public class ArticleCategoryController {
     public JsonResult<List<ArticleCategoryListItemVO>> list(Long parentId) {
         log.debug("开始处理【根据父级文章类别查询子级文章类别列表】的业务，参数：{}", parentId);
         List<ArticleCategoryListItemVO> list = articleCategoryService.listByParentId(parentId);
+        return JsonResult.ok(list);
+    }
+
+    @GetMapping("/list-children-by-parent")
+    @ApiOperation("查询父子级联级列表")
+    @ApiOperationSupport(order = 430)
+    public JsonResult<List<ArticleCategoryListItemVO>> list() {
+        log.debug("开始处理【根据父级文章类别查询子级文章类别列表】的业务");
+        List<ArticleCategoryListItemVO> list = articleCategoryService.listChildrenByParentId();
         return JsonResult.ok(list);
     }
 

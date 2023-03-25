@@ -220,6 +220,34 @@ public class ArticleCategoryServiceImpl implements IArticleCategoryService {
         return list;
     }
 
+    @Override
+    public List<ArticleCategoryListItemVO> listChildrenByParentId() {
+        //开始查询
+        List<ArticleCategoryListItemVO> list = articleCategoryMapper.listByParentId(0L);
+        for (ArticleCategoryListItemVO categoryList : list) {
+            getChildren(categoryList);
+
+        }
+        return list;
+    }
+
+    private void getChildren(ArticleCategoryListItemVO articleCategoryList){
+        //获得这个集合的所有子集
+        List<ArticleCategoryListItemVO> childrens = articleCategoryMapper.listByParentId(articleCategoryList.getId());
+
+        //如果子集为空,则停止
+        if(childrens==null){
+            return;
+        }
+        //将子集放进父级的子集列表
+        articleCategoryList.setChildren(childrens);
+
+        //遍历子集,
+        for (ArticleCategoryListItemVO c: childrens){
+            getChildren(c);
+        }
+    }
+
     private void updateEnableById(Long id, Integer enable) {
         // 调用Mapper对象的getStandardById()方法执行查询
         ArticleCategoryStandardVO currentCategory = articleCategoryMapper.getStandardById(id);

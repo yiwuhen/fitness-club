@@ -92,4 +92,6 @@ public interface IArticleCategoryService {
      */
     List<ArticleCategoryListItemVO> listByParentId(Long parentId);
 
+    List<ArticleCategoryListItemVO> listChildrenByParentId();
+
 }

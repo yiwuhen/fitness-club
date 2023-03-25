@@ -3,6 +3,7 @@ package cn.tedu.fitnessClub.pojo.vo;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 文章类别数据的列表项VO类
@@ -52,5 +53,11 @@ public class ArticleCategoryListItemVO implements Serializable {
      * 是否显示在导航栏中，1=启用，0=未启用
      */
     private Integer isDisplay;
+
+    /**
+     * 子集列表
+     *
+     */
+    private List<ArticleCategoryListItemVO> children;
 
 }

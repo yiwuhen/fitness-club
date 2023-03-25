@@ -42,12 +42,6 @@
     <update id="update">
         UPDATE bms_article
         <set>
-            <if test="categoryId != null">
-                category_id=#{categoryId},
-            </if>
-            <if test="categoryName != null">
-                category_name=#{categoryName},
-            </if>
             <if test="title != null">
                 title=#{title},
             </if>
@@ -72,6 +66,11 @@
     <!-- int countByCategoryId(Long categoryId); -->
     <select id="countByCategoryId" resultType="int">
         SELECT count(*) FROM bms_article WHERE category_id=#{categoryId}
+    </select>
+
+    <!-- int countByTitle(String title); -->
+    <select id="countByTitle" resultType="int">
+        SELECT count(*) FROM bms_article WHERE title=#{title}
     </select>
 
     <!-- int countByNameAndNotId(@Param("id") Long id, @Param("name") String title); -->
