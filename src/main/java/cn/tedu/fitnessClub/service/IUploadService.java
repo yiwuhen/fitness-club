@@ -1,6 +1,6 @@
 package cn.tedu.fitnessClub.service;
 
-import com.jcraft.jsch.JSchException;
+
 import org.springframework.web.multipart.MultipartFile;
 
 public interface IUploadService {
@@ -10,5 +10,5 @@ public interface IUploadService {
      * @param picFile 上传的图片数据
      * @return 图片的url
      */
-    String upload(MultipartFile picFile) throws JSchException;
+    String upload(MultipartFile picFile) ;
 }
