@@ -39,7 +39,7 @@ public class ArticleController {
     @PostMapping("/add-new")
     @ApiOperation("添加文章")
     @ApiOperationSupport(order = 100)
-    public JsonResult<Long> addNew(@Valid ArticleAddNewDTO articleAddNewDTO) {
+    public JsonResult<Long> addNew( ArticleAddNewDTO articleAddNewDTO) {
         log.debug("开始处理【添加文章】的请求，参数：{}", articleAddNewDTO);
         Long articleId = articleService.addNew(articleAddNewDTO);
         return JsonResult.ok(articleId);
