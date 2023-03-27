@@ -1,13 +1,18 @@
 package cn.tedu.fitnessClub.service.impl;
 
 import cn.tedu.fitnessClub.service.IUploadService;
+import com.jcraft.jsch.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -16,27 +21,66 @@ import java.util.UUID;
 @Slf4j
 public class UploadService implements IUploadService {
 
-    @Value("${dirPath}")
-    private String dirPath;
 
     @Override
-    public String upload(MultipartFile picFile) {
+    public String upload(MultipartFile picFile)  {
+        //获取文件的原始名字
         String fileName = picFile.getOriginalFilename();
+        log.info("上传的文件名是:{}",fileName);
+       //截取文件名
         String suffix = fileName.substring(fileName.lastIndexOf("."));
+
         fileName = UUID.randomUUID()+suffix;
 
-        SimpleDateFormat sdf = new SimpleDateFormat("/yyyy/MM/dd/");
+         log.info("修改之后的文件名:{}",fileName);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd/");
+        //将日期格式化为问文件夹
         String dataPath = sdf.format(new Date());
-        File dirFile = new File(dirPath+dataPath);
+         //获得当前类路径
+         String classPath = UploadService.class.getClassLoader().getResource("").getPath();
+
+        File dirFile = new File(classPath+dataPath);
         if (!dirFile.exists()){
             dirFile.mkdirs();
         }
-        String filePath = dirPath+dataPath+fileName;
+        //要返回的文件目录路径
+        String filePath = classPath+dataPath+fileName;
+
+
         try {
-            picFile.transferTo(new File(filePath));
+            File resultFile= new File(filePath);
+            picFile.transferTo(resultFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return dataPath+fileName;
+        ClassPathResource resource = new ClassPathResource(dataPath+fileName);
+        try {
+            System.out.println("文件的url:"+resource.getURL());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "http://localhost:10001/"+dataPath+fileName;
+
+
+
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

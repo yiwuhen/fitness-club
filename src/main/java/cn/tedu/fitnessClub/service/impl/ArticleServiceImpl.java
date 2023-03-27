@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class ArticleServiceImpl implements IArticleService {
     private ArticleCategoryMapper articleCategoryMapper;
 
     @Override
-    public Long addNew(ArticleAddNewDTO articleAddNewDTO) {
+    public Long addNew(@Validated ArticleAddNewDTO articleAddNewDTO) {
         log.debug("开始处理【添加文章】的业务，参数：{}", articleAddNewDTO);
         String title = articleAddNewDTO.getTitle();
         int count = articleMapper.countByTitle(title);

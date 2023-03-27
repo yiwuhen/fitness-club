@@ -6,9 +6,16 @@ spring:
   servlet:
     multipart:
       max-file-size: 10MB
-  web:
-    resources:
-      static-locations: file:${dirPath},classpath:static
+
+
+  resources:
+    static-locations: classpath:/
+
+
+
+
+
+
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
@@ -17,3 +24,5 @@ knife4j:
   enable: true
 
 dirPath: e:/articlePicture
+
+
