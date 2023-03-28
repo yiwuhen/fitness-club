@@ -53,6 +53,12 @@
             <if test="sort != null">
                 sort=#{sort},
             </if>
+            <if test="categoryId != null">
+                category_id=#{categoryId},
+            </if>
+            <if test="categoryName != null">
+                category_name=#{categoryName},
+            </if>
         </set>
         WHERE id=#{id}
     </update>

@@ -11,6 +11,7 @@ import cn.tedu.fitnessClub.pojo.vo.ArticleListItemVO;
 import cn.tedu.fitnessClub.pojo.vo.ArticleStandardVO;
 import cn.tedu.fitnessClub.restful.ServiceCode;
 import cn.tedu.fitnessClub.service.IArticleService;
+import com.sun.xml.internal.bind.v2.TODO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,6 +99,12 @@ public class ArticleServiceImpl implements IArticleService {
         Article article = new Article();
         BeanUtils.copyProperties(articleUpdateDTO, article);
         article.setId(id);
+
+        ArticleCategoryStandardVO articleCategoryStandardVO =
+                articleCategoryMapper.getStandardById(articleUpdateDTO.getCategoryId());
+        String categoryName = articleCategoryStandardVO.getName();
+        article.setCategoryName(categoryName);
+
         int rows = articleMapper.update(article);
         if (rows != 1) {
             String message = "更改失败，服务器忙，请稍后再尝试！";
