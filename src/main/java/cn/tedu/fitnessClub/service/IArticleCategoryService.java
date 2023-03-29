@@ -92,6 +92,11 @@ public interface IArticleCategoryService {
      */
     List<ArticleCategoryListItemVO> listByParentId(Long parentId);
 
+    /**
+     * 查询父子级联列表
+     *
+     * @return 父子级联的集合
+     */
     List<ArticleCategoryListItemVO> listChildrenByParentId();
 
 }

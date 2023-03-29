@@ -9,9 +9,11 @@ import cn.tedu.fitnessClub.pojo.entity.Article;
 import cn.tedu.fitnessClub.pojo.vo.ArticleCategoryStandardVO;
 import cn.tedu.fitnessClub.pojo.vo.ArticleListItemVO;
 import cn.tedu.fitnessClub.pojo.vo.ArticleStandardVO;
+import cn.tedu.fitnessClub.restful.JsonPage;
 import cn.tedu.fitnessClub.restful.ServiceCode;
 import cn.tedu.fitnessClub.service.IArticleService;
-import com.sun.xml.internal.bind.v2.TODO;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -127,14 +129,14 @@ public class ArticleServiceImpl implements IArticleService {
 
     @Override
     public List<ArticleListItemVO> listByCategoryId(Long categoryId) {
-        log.debug("开始处理【根据文章类别查询其文章列表】的业务，无参数");
+        log.debug("开始处理【根据文章类别查询其文章列表】的业务，参数:{}",categoryId);
         List<ArticleListItemVO> list = articleMapper.listByCategoryId(categoryId);
         return list;
     }
 
     @Override
     public List<ArticleListItemVO> listByCategoryIds(Long[] categoryIds) {
-        log.debug("开始处理【根据多个文章类别查询其文章列表】的业务，无参数");
+        log.debug("开始处理【根据文章类别查询其文章列表】的业务，参数:{}",categoryIds);
         List<ArticleListItemVO> list = articleMapper.listByCategoryIds(categoryIds);
         return list;
     }
@@ -144,5 +146,26 @@ public class ArticleServiceImpl implements IArticleService {
         log.debug("开始处理【查询文章列表】的业务，无参数");
         List<ArticleListItemVO> list = articleMapper.list();
         return list;
+    }
+
+    @Override
+    public JsonPage<ArticleListItemVO> getArticleByCategoryIdsAndPage(Long[] categoryIds, Integer page, Integer pageSize) {
+        PageHelper.startPage(page,pageSize);
+        List<ArticleListItemVO> list = articleMapper.listByCategoryIds(categoryIds);
+        return JsonPage.restPage(new PageInfo<>(list));
+    }
+
+    @Override
+    public JsonPage<ArticleListItemVO> getAllArticlesByPage(Integer page, Integer pageSize) {
+        PageHelper.startPage(page,pageSize);
+        List<ArticleListItemVO> list = articleMapper.list();
+        return JsonPage.restPage(new PageInfo<>(list));
+    }
+
+    @Override
+    public JsonPage<ArticleListItemVO> getArticleByCategoryIdAndPage(Long categoryId, Integer page, Integer pageSize) {
+        PageHelper.startPage(page,pageSize);
+        List<ArticleListItemVO> list = articleMapper.listByCategoryId(categoryId);
+        return JsonPage.restPage(new PageInfo<>(list));
     }
 }

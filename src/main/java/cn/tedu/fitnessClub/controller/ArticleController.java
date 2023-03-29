@@ -4,6 +4,7 @@ import cn.tedu.fitnessClub.pojo.dto.ArticleAddNewDTO;
 import cn.tedu.fitnessClub.pojo.dto.ArticleUpdateDTO;
 import cn.tedu.fitnessClub.pojo.vo.ArticleListItemVO;
 import cn.tedu.fitnessClub.pojo.vo.ArticleStandardVO;
+import cn.tedu.fitnessClub.restful.JsonPage;
 import cn.tedu.fitnessClub.restful.JsonResult;
 import cn.tedu.fitnessClub.service.IArticleService;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
@@ -35,11 +36,11 @@ public class ArticleController {
 
     @Autowired
     private IArticleService articleService;
-    
+
     @PostMapping("/add-new")
     @ApiOperation("添加文章")
     @ApiOperationSupport(order = 100)
-    public JsonResult<Long> addNew( ArticleAddNewDTO articleAddNewDTO) {
+    public JsonResult<Long> addNew(ArticleAddNewDTO articleAddNewDTO) {
         log.debug("开始处理【添加文章】的请求，参数：{}", articleAddNewDTO);
         Long articleId = articleService.addNew(articleAddNewDTO);
         return JsonResult.ok(articleId);
@@ -95,17 +96,44 @@ public class ArticleController {
     public JsonResult<List<ArticleListItemVO>> listByCategoryId(
             @PathVariable("id") @Range(min = 1, message = "请提交有效的ID值！") Long categoryId
     ) {
-        log.debug("开始处理【根据文章类别查询文章列表】的请求，无参数");
+        log.debug("开始处理【根据文章类别查询文章列表】的请求");
         List<ArticleListItemVO> listByCategoryId = articleService.listByCategoryId(categoryId);
         return JsonResult.ok(listByCategoryId);
     }
 
-    @PostMapping("/list-by-categoryIds")
+    @GetMapping("/list-by-categoryIds")
     @ApiOperation("根据多个文章类别查询文章列表")
     @ApiOperationSupport(order = 440)
-    public JsonResult<List<ArticleListItemVO>> list(Long[] categoryIds) {
-        log.debug("开始处理【查询文章列表】的请求，无参数");
-        List<ArticleListItemVO> list = articleService.listByCategoryIds(categoryIds);
+    public JsonResult<List<ArticleListItemVO>> listByCategoryId(Long[] categoryIds) {
+        log.debug("开始处理【根据多个文章类别查询文章列表】的请求");
+        List<ArticleListItemVO> listByCategoryId = articleService.listByCategoryIds(categoryIds);
+        return JsonResult.ok(listByCategoryId);
+    }
+
+    @PostMapping("/list-by-Page")
+    @ApiOperation("查询文章列表并分页")
+    @ApiOperationSupport(order = 450)
+    public JsonResult<JsonPage<ArticleListItemVO>> list(Integer page, Integer pageSize) {
+        log.debug("开始处理【根据文章类别查询文章列表并分页】的请求");
+        JsonPage<ArticleListItemVO> list = articleService.getAllArticlesByPage(page,pageSize);
+        return JsonResult.ok(list);
+    }
+
+    @PostMapping("/list-by-categoryIdAndPage")
+    @ApiOperation("根据文章类别查询文章列表并分页")
+    @ApiOperationSupport(order = 460)
+    public JsonResult<JsonPage<ArticleListItemVO>> list(Long categoryId, Integer page, Integer pageSize) {
+        log.debug("开始处理【根据文章类别查询文章列表并分页】的请求");
+        JsonPage<ArticleListItemVO> list = articleService.getArticleByCategoryIdAndPage(categoryId,page,pageSize);
+        return JsonResult.ok(list);
+    }
+
+    @PostMapping("/list-by-categoryIdsAndPage")
+    @ApiOperation("根据多个文章类别查询文章列表并分页")
+    @ApiOperationSupport(order = 470)
+    public JsonResult<JsonPage<ArticleListItemVO>> list(Long[] categoryIds, Integer page, Integer pageSize) {
+        log.debug("开始处理【根据多个文章类别查询文章列表并分页】的请求");
+        JsonPage<ArticleListItemVO> list = articleService.getArticleByCategoryIdsAndPage(categoryIds,page,pageSize);
         return JsonResult.ok(list);
     }
 }

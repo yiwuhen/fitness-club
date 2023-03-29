@@ -7,6 +7,7 @@ import cn.tedu.fitnessClub.pojo.vo.ArticleCategoryListItemVO;
 import cn.tedu.fitnessClub.pojo.vo.ArticleCategoryStandardVO;
 import cn.tedu.fitnessClub.pojo.vo.ArticleListItemVO;
 import cn.tedu.fitnessClub.pojo.vo.ArticleStandardVO;
+import cn.tedu.fitnessClub.restful.JsonPage;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -60,7 +61,7 @@ public interface IArticleService {
      * 根据多个文章类别查询其文章列表
      *
      * @param categoryIds 多个文章类别的id
-     * @return 匹配文章类别的文章列表
+     * @return 匹配多个文章类别的文章列表
      */
     List<ArticleListItemVO> listByCategoryIds(Long[] categoryIds);
 
@@ -70,6 +71,37 @@ public interface IArticleService {
      * @return 文章列表
      */
     List<ArticleListItemVO> list();
+
+    /**
+     * 根据多个文章类别查询其文章列表并分页
+     *
+     * @param categoryIds 多个文章类别的id
+     * @param page 页码
+     * @param pageSize 每页条数
+     * @return 匹配多个文章类别并分页的文章列表
+     */
+    JsonPage<ArticleListItemVO> getArticleByCategoryIdsAndPage(Long[] categoryIds, Integer page, Integer pageSize);
+
+    /**
+     * 分页查询文章列表
+     *
+     * @param page 页码
+     * @param pageSize 每页条数
+     * @return 分页的文章列表
+     */
+    JsonPage<ArticleListItemVO> getAllArticlesByPage(Integer page, Integer pageSize);
+
+    /**
+     * 根据文章类别查询其文章列表并分页
+     *
+     * @param categoryId 文章类别的id
+     * @param page 页码
+     * @param pageSize 每页条数
+     * @return 匹配文章类别并分页的文章列表
+     */
+    JsonPage<ArticleListItemVO> getArticleByCategoryIdAndPage(Long categoryId, Integer page, Integer pageSize);
+
+
 
 
 }
