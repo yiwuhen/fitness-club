@@ -151,6 +151,7 @@ public class ArticleServiceImpl implements IArticleService {
     @Override
     public JsonPage<ArticleListItemVO> getArticleByCategoryIdsAndPage(Long[] categoryIds, Integer page, Integer pageSize) {
         PageHelper.startPage(page,pageSize);
+        log.debug("开始处理【根据多个文章类别查询文章列表并分页】的业务，无参数");
         List<ArticleListItemVO> list = articleMapper.listByCategoryIds(categoryIds);
         return JsonPage.restPage(new PageInfo<>(list));
     }
@@ -158,6 +159,7 @@ public class ArticleServiceImpl implements IArticleService {
     @Override
     public JsonPage<ArticleListItemVO> getAllArticlesByPage(Integer page, Integer pageSize) {
         PageHelper.startPage(page,pageSize);
+        log.debug("开始处理【根据文章类别查询文章列表并分页】的业务，无参数");
         List<ArticleListItemVO> list = articleMapper.list();
         return JsonPage.restPage(new PageInfo<>(list));
     }
@@ -165,6 +167,7 @@ public class ArticleServiceImpl implements IArticleService {
     @Override
     public JsonPage<ArticleListItemVO> getArticleByCategoryIdAndPage(Long categoryId, Integer page, Integer pageSize) {
         PageHelper.startPage(page,pageSize);
+        log.debug("开始处理【根据文章类别查询文章列表并分页】的业务，无参数");
         List<ArticleListItemVO> list = articleMapper.listByCategoryId(categoryId);
         return JsonPage.restPage(new PageInfo<>(list));
     }

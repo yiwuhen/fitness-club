@@ -8,4 +8,4 @@ spring:
 
 logging:
   level:
-    cn.tedu.fitnessclub: trace
+    cn.tedu.fitnessClub: trace
