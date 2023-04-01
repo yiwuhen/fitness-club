@@ -27,6 +27,13 @@ public interface IArticlePictureService {
     void addNew(ArticlePictureAddNewDTO articlePictureAddNewDTO);
 
     /**
+     * 批量添加文章图片
+     *
+     * @param articlePictureAddNewDTOS 新的多个文章图片数据
+     */
+    void addNewList(List<ArticlePictureAddNewDTO> articlePictureAddNewDTOS);
+
+    /**
      * 删除文章图片
      *
      * @param id 尝试删除的文章图片数据的ID

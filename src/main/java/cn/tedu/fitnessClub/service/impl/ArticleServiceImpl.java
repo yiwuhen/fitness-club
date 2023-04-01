@@ -95,6 +95,10 @@ public class ArticleServiceImpl implements IArticleService {
 
         // 根据文章id删除封面的数据库信息
         ArticlePictureStandardVO standardByArticleId = articlePictureMapper.getStandardByArticleId(id);
+        // 如果该文章没有关联图片，return
+        if (standardByArticleId == null) {
+            return;
+        }
         Long delPicId = standardByArticleId.getId();
         log.debug("即将删除对应文章的封面，id：{}",delPicId);
         int rows2 = articlePictureMapper.deleteById(delPicId);
