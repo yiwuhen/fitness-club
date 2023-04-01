@@ -2,6 +2,7 @@ package cn.tedu.fitnessClub.service.impl;
 
 import cn.tedu.fitnessClub.ex.ServiceException;
 import cn.tedu.fitnessClub.mapper.ArticleCategoryMapper;
+import cn.tedu.fitnessClub.mapper.ArticleMapper;
 import cn.tedu.fitnessClub.pojo.dto.ArticleCategoryAddNewDTO;
 import cn.tedu.fitnessClub.pojo.dto.ArticleCategoryUpdateDTO;
 import cn.tedu.fitnessClub.pojo.entity.ArticleCategory;
@@ -22,6 +23,9 @@ public class ArticleCategoryServiceImpl implements IArticleCategoryService {
 
     @Autowired
     private ArticleCategoryMapper articleCategoryMapper;
+
+    @Autowired
+    private ArticleMapper articleMapper;
 
     public ArticleCategoryServiceImpl() {
         log.debug("创建业务类对象：CategoryServiceImpl");
@@ -110,6 +114,14 @@ public class ArticleCategoryServiceImpl implements IArticleCategoryService {
         // 判断查询结果中的isParent是否为1，如果是，则抛出异常
         if (currentCategory.getIsParent() == 1) {
             String message = "删除文章类别失败，该文章类别仍包含子级文章类别！";
+            log.warn(message);
+            throw new ServiceException(ServiceCode.ERROR_CONFLICT, message);
+        }
+
+        //判断该文章类别是否仍有文章关联,如果有.则抛出异常
+        if (!articleMapper.listByCategoryId(id).isEmpty()) {
+            log.debug("查出的文章详情:{}", articleMapper.listByCategoryId(id));
+            String message = "删除文章类别失败，该文章类别仍有文章关联！";
             log.warn(message);
             throw new ServiceException(ServiceCode.ERROR_CONFLICT, message);
         }
@@ -231,19 +243,19 @@ public class ArticleCategoryServiceImpl implements IArticleCategoryService {
         return list;
     }
 
-    private void getChildren(ArticleCategoryListItemVO articleCategoryList){
+    private void getChildren(ArticleCategoryListItemVO articleCategoryList) {
         //获得这个集合的所有子集
         List<ArticleCategoryListItemVO> childrens = articleCategoryMapper.listByParentId(articleCategoryList.getId());
 
         //如果子集为空,则停止
-        if(childrens==null){
+        if (childrens == null) {
             return;
         }
         //将子集放进父级的子集列表
         articleCategoryList.setChildren(childrens);
 
         //遍历子集,
-        for (ArticleCategoryListItemVO c: childrens){
+        for (ArticleCategoryListItemVO c : childrens) {
             getChildren(c);
         }
     }
