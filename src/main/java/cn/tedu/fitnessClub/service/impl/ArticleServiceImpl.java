@@ -94,7 +94,8 @@ public class ArticleServiceImpl implements IArticleService {
         }
 
         // 根据文章id删除封面的数据库信息
-        Long delPicId = articlePictureMapper.selectPictureIdByArticleId(id);
+        ArticlePictureStandardVO standardByArticleId = articlePictureMapper.getStandardByArticleId(id);
+        Long delPicId = standardByArticleId.getId();
         log.debug("即将删除对应文章的封面，id：{}",delPicId);
         int rows2 = articlePictureMapper.deleteById(delPicId);
         if (rows2 != 1){
@@ -104,9 +105,11 @@ public class ArticleServiceImpl implements IArticleService {
         }
 
         // 根据文章id删除封面的本地文件
-        ArticlePictureStandardVO standardByArticle = articlePictureMapper.getStandardByArticle(id);
-        System.out.println(standardByArticle);
-        /*log.debug("得到了文章id对应服务器图片的url：{}",deleteUrl+"即将执行删除操作！");
+        log.debug("要删除的图片数据{}",standardByArticleId);
+        String deleteUrl = standardByArticleId.getUrl().substring("http://localhost:10001/".length());
+        log.debug("要删除的图片url{}",deleteUrl);
+        System.out.println(standardByArticleId);
+        //log.debug("得到了文章id对应服务器图片的url：{}",deleteUrl+"即将执行删除操作！");
         String filePath3 = projectPath + UPLOAD_PATH_PREFIX + deleteUrl;
         String filePath4 = filePath3.replace("\\", "/");
         log.debug("要处理的图片的路径是：{}", filePath3);
@@ -115,7 +118,7 @@ public class ArticleServiceImpl implements IArticleService {
             log.debug("文件【{}】删除成功！", file);
         } else {
             log.debug("文件【{}】删除失败！", file);
-        }*/
+        }
 
     }
 

@@ -170,7 +170,7 @@ public class ArticlePictureServiceImpl implements IArticlePictureService {
 
     @Override
     public List<ArticlePictureListItemVO> listByArticleId(Long articleId) {
-        log.debug("开始处理【根据文章id查询其文章图片列表】的业务，无参数");
+        log.debug("开始处理【根据文章id查询其文章图片列表】的业务");
         List<ArticlePictureListItemVO> list = articlePictureMapper.listByArticleId(articleId);
         return list;
     }

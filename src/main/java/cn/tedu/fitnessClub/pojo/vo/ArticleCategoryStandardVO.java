@@ -3,6 +3,7 @@ package cn.tedu.fitnessClub.pojo.vo;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * 文章类别数据的标准VO类
@@ -52,5 +53,15 @@ public class ArticleCategoryStandardVO implements Serializable {
      * 是否显示在导航栏中，1=启用，0=未启用
      */
     private Integer isDisplay;
+
+    /**
+     * 数据创建时间
+     */
+    private LocalDateTime gmtCreate;
+
+    /**
+     * 数据最后修改时间
+     */
+    private LocalDateTime gmtModified;
 
 }

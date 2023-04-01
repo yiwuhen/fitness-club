@@ -54,4 +54,14 @@ public class ArticleListItemVO implements Serializable {
      */
     private Integer sort;
 
+    /**
+     * 数据创建时间
+     */
+    private LocalDateTime gmtCreate;
+
+    /**
+     * 数据最后修改时间
+     */
+    private LocalDateTime gmtModified;
+
 }
