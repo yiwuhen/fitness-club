@@ -26,6 +26,14 @@ public interface ArticlePictureMapper {
     int insert(ArticlePicture articlePicture);
 
     /**
+     * 批量插入文章图片数据
+     *
+     * @param pictureList 若干个文章图片数据的集合
+     * @return 受影响的行数
+     */
+    int insertBatch(List<ArticlePicture> pictureList);
+
+    /**
      * 根据id删除文章图片数据
      *
      * @param id 文章图片id
