@@ -60,6 +60,10 @@
         </set>
         WHERE id=#{id}
     </update>
+    <!--根据article_id查询封面图片id-->
+    <select id="selectPictureIdByArticleId" resultType="long">
+        SELECT id FROM bms_article_picture WHERE article_id=#{articleId}
+    </select>
 
     <!-- int count(); -->
     <select id="count" resultType="int">
@@ -79,6 +83,16 @@
         bms_article_picture
         WHERE
             id=#{id}
+    </select>
+
+    <!--根据文章ID查询文章图片详情getStandardByArticleId-->
+    <select id="getStandardByArticleId" resultMap="StandardResultMap"  >
+        SELECT
+        <include refid="StandardQueryFields"/>
+        FROM
+        bms_article_picture
+        WHERE
+        article_id=#{articleId}
     </select>
 
     <!-- List<ArticlePictureListItemVO> list(); -->
@@ -101,6 +115,14 @@
             article_id=#{articleId}
         ORDER BY
             sort DESC, id DESC
+    </select>
+    <select id="getStandardByArticle" resultType="cn.tedu.fitnessClub.pojo.vo.ArticlePictureStandardVO">
+        SELECT
+        <include refid="StandardQueryFields"/>
+        FROM
+        bms_article_picture
+        WHERE
+        article_id=#{articleId}
     </select>
 
     <sql id="StandardQueryFields">

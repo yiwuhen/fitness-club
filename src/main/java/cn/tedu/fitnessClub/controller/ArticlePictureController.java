@@ -1,5 +1,7 @@
 package cn.tedu.fitnessClub.controller;
 import cn.tedu.fitnessClub.pojo.dto.ArticlePictureAddNewDTO;
+import cn.tedu.fitnessClub.pojo.dto.ArticlePictureDeleteCoverDTO;
+import cn.tedu.fitnessClub.pojo.dto.ArticlePictureDeleteUnnecessaryPicDTO;
 import cn.tedu.fitnessClub.pojo.dto.ArticlePictureUpdateDTO;
 import cn.tedu.fitnessClub.pojo.vo.ArticlePictureListItemVO;
 import cn.tedu.fitnessClub.pojo.vo.ArticlePictureStandardVO;
@@ -17,6 +19,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -53,6 +57,24 @@ public class ArticlePictureController {
     public JsonResult<Void> delete(@PathVariable @Range(min = 1, message = "请提交有效的ID值！") Long id) {
         log.debug("开始处理【根据ID删除文章图片】的请求，参数：{}", id);
         articlePictureService.delete(id);
+        return JsonResult.ok();
+    }
+
+    @PostMapping("/deleteUnnecessaryPic")
+    @ApiOperation("删除服务器静态资源文件夹冗余图片")
+    @ApiOperationSupport(order = 210)
+    public JsonResult<Void> deleteUnnecessaryPic(@RequestBody ArticlePictureDeleteUnnecessaryPicDTO[] articlePictureDeleteUnnecessaryPicDTO){
+        log.debug("开始处理【删除服务器静态资源文件夹冗余图片】的请求，参数：{}",articlePictureDeleteUnnecessaryPicDTO);
+        articlePictureService.deleteUnnecessaryPic(articlePictureDeleteUnnecessaryPicDTO);
+        return JsonResult.ok();
+    }
+
+    @PostMapping("/deleteCoverByIsDelDB")
+    @ApiOperation("删除静态资源文件夹内的封面图片")
+    @ApiOperationSupport(order = 220)
+    public JsonResult<Void> deleteCoverByIsDelDB(@RequestBody ArticlePictureDeleteCoverDTO articlePictureDeleteCoverDTO){
+        log.debug("开始处理【删除静态资源文件夹内的封面图片】的业务，参数：{}",articlePictureDeleteCoverDTO);
+        articlePictureService.deleteCoverByIsDelDB(articlePictureDeleteCoverDTO);
         return JsonResult.ok();
     }
 

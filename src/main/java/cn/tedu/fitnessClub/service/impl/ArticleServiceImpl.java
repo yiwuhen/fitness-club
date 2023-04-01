@@ -3,11 +3,13 @@ package cn.tedu.fitnessClub.service.impl;
 import cn.tedu.fitnessClub.ex.ServiceException;
 import cn.tedu.fitnessClub.mapper.ArticleCategoryMapper;
 import cn.tedu.fitnessClub.mapper.ArticleMapper;
+import cn.tedu.fitnessClub.mapper.ArticlePictureMapper;
 import cn.tedu.fitnessClub.pojo.dto.ArticleAddNewDTO;
 import cn.tedu.fitnessClub.pojo.dto.ArticleUpdateDTO;
 import cn.tedu.fitnessClub.pojo.entity.Article;
 import cn.tedu.fitnessClub.pojo.vo.ArticleCategoryStandardVO;
 import cn.tedu.fitnessClub.pojo.vo.ArticleListItemVO;
+import cn.tedu.fitnessClub.pojo.vo.ArticlePictureStandardVO;
 import cn.tedu.fitnessClub.pojo.vo.ArticleStandardVO;
 import cn.tedu.fitnessClub.restful.JsonPage;
 import cn.tedu.fitnessClub.restful.ServiceCode;
@@ -20,14 +22,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import java.io.File;
 import java.util.List;
 
 @Service
 @Slf4j
 public class ArticleServiceImpl implements IArticleService {
 
+    //获取当前项目的根路径
+    String projectPath = System.getProperty("user.dir");
+    //目录相当于是根路径下
+    private final static String UPLOAD_PATH_PREFIX = "/src/main/resources/static/";
+
     @Autowired
     private ArticleMapper articleMapper;
+
+    @Autowired
+    private ArticlePictureMapper articlePictureMapper;
 
     @Autowired
     private ArticleCategoryMapper articleCategoryMapper;
@@ -64,6 +75,7 @@ public class ArticleServiceImpl implements IArticleService {
     @Override
     public void delete(Long id) {
         log.debug("开始处理【根据ID删除文章】的业务，参数：{}", id);
+        // 根据文章id查询到文章
         ArticleStandardVO article = articleMapper.getStandardById(id);
         log.debug("根据ID={}检查文章数据是否存在，查询结果：{}", id, article);
         if (article == null) {
@@ -72,13 +84,39 @@ public class ArticleServiceImpl implements IArticleService {
             throw new ServiceException(ServiceCode.ERROR_NOT_FOUND, message);
         }
 
-        log.debug("即将执行删除，参数：{}", id);
+        // 根据文章id删除文章
+        log.debug("即将执行删除文章：{}", id);
         int rows = articleMapper.deleteById(id);
         if (rows != 1) {
-            String message = "删除失败，服务器忙，请稍后再尝试！";
+            String message = "删除文章失败，服务器忙，请稍后再尝试！";
             log.warn(message);
             throw new ServiceException(ServiceCode.ERROR_DELETE, message);
         }
+
+        // 根据文章id删除封面的数据库信息
+        Long delPicId = articlePictureMapper.selectPictureIdByArticleId(id);
+        log.debug("即将删除对应文章的封面，id：{}",delPicId);
+        int rows2 = articlePictureMapper.deleteById(delPicId);
+        if (rows2 != 1){
+            String message = "删除文章对应封面失败，服务器忙，请稍后再尝试！";
+            log.warn(message);
+            throw new ServiceException(ServiceCode.ERROR_DELETE,message);
+        }
+
+        // 根据文章id删除封面的本地文件
+        ArticlePictureStandardVO standardByArticle = articlePictureMapper.getStandardByArticle(id);
+        System.out.println(standardByArticle);
+        /*log.debug("得到了文章id对应服务器图片的url：{}",deleteUrl+"即将执行删除操作！");
+        String filePath3 = projectPath + UPLOAD_PATH_PREFIX + deleteUrl;
+        String filePath4 = filePath3.replace("\\", "/");
+        log.debug("要处理的图片的路径是：{}", filePath3);
+        File file = new File(filePath4);
+        if (file.delete()) {
+            log.debug("文件【{}】删除成功！", file);
+        } else {
+            log.debug("文件【{}】删除失败！", file);
+        }*/
+
     }
 
     @Override

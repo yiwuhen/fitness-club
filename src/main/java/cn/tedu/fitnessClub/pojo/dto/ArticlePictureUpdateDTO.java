@@ -14,9 +14,19 @@ import java.io.Serializable;
 public class ArticlePictureUpdateDTO implements Serializable {
 
     /**
+     * 文章id
+     */
+    private Long articleId;
+
+    /**
      * 文章图片url
      */
     private String url;
+
+    /**
+     * 是否为封面文章图片，1=是，0=否
+     */
+    private Integer isCover;
 
     /**
      * 文章图片简介

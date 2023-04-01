@@ -1,15 +1,14 @@
 package cn.tedu.fitnessClub.service;
 
-import cn.tedu.fitnessClub.pojo.dto.ArticleAddNewDTO;
-import cn.tedu.fitnessClub.pojo.dto.ArticlePictureAddNewDTO;
-import cn.tedu.fitnessClub.pojo.dto.ArticlePictureUpdateDTO;
-import cn.tedu.fitnessClub.pojo.dto.ArticleUpdateDTO;
+import cn.tedu.fitnessClub.pojo.dto.*;
+import cn.tedu.fitnessClub.pojo.entity.ArticlePicture;
 import cn.tedu.fitnessClub.pojo.vo.ArticleListItemVO;
 import cn.tedu.fitnessClub.pojo.vo.ArticlePictureListItemVO;
 import cn.tedu.fitnessClub.pojo.vo.ArticlePictureStandardVO;
 import cn.tedu.fitnessClub.pojo.vo.ArticleStandardVO;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,6 +34,18 @@ public interface IArticlePictureService {
     void delete(Long id);
 
     /**
+     * 删除服务器静态资源文件夹冗余图片
+     *
+     * @param articlePictureDeleteUnnecessaryPicDTO 冗余图片的url
+     */
+    void deleteUnnecessaryPic(ArticlePictureDeleteUnnecessaryPicDTO[] articlePictureDeleteUnnecessaryPicDTO);
+
+    /**
+     * 删除封面
+     */
+    void deleteCoverByIsDelDB(ArticlePictureDeleteCoverDTO articlePictureDeleteCoverDTO);
+
+    /**
      * 修改文章图片数据
      * @param id 被修改的文章图片数据的ID
      * @param articlePictureUpdateDTO 文章图片的新数据
@@ -48,6 +59,13 @@ public interface IArticlePictureService {
      * @return 匹配的文章图片数据详情，如果没有匹配的数据，则返回null
      */
     ArticlePictureStandardVO getStandardById(Long id);
+
+    /**
+     * 根据文章ID查询文章图片详情
+     * @param articleId
+     * @return
+     */
+    ArticlePictureStandardVO getStandardByArticleId(Long articleId);
 
     /**
      * 根据文章id类别查询其文章图片列表

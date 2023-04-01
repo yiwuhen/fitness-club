@@ -3,6 +3,7 @@ package cn.tedu.fitnessClub.mapper;
 import cn.tedu.fitnessClub.pojo.entity.ArticlePicture;
 import cn.tedu.fitnessClub.pojo.vo.ArticlePictureListItemVO;
 import cn.tedu.fitnessClub.pojo.vo.ArticlePictureStandardVO;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -80,6 +81,22 @@ public interface ArticlePictureMapper {
     ArticlePictureStandardVO getStandardById(Long id);
 
     /**
+     * 根据article_id查询封面图片id
+     *
+     * @param articleId 文章id
+     * @return 对应的图片id
+     */
+    Long selectPictureIdByArticleId (Long articleId);
+
+    /**
+     * 根据article_id查询文章图片数据详情
+     *
+     * @param articleId 文章id
+     * @return 匹配的文章图片数据详情，如果没有匹配的数据，则返回null
+     */
+    ArticlePictureStandardVO getStandardByArticleId(Long articleId);
+
+    /**
      * 根据articleId查询文章图片列表
      *
      * @param articleId 文章id
@@ -94,4 +111,5 @@ public interface ArticlePictureMapper {
      */
     List<ArticlePictureListItemVO> list();
 
+    ArticlePictureStandardVO getStandardByArticle(Long id);
 }

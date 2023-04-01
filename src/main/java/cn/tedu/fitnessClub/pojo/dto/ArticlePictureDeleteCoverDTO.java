@@ -1,4 +1,4 @@
-package cn.tedu.fitnessClub.pojo.entity;
+package cn.tedu.fitnessClub.pojo.dto;
 
 import lombok.Data;
 
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
  * @version 0.0.1
  */
 @Data
-public class ArticlePicture implements Serializable {
+public class ArticlePictureDeleteCoverDTO implements Serializable {
 
     /**
      * 数据id
@@ -43,29 +43,4 @@ public class ArticlePicture implements Serializable {
      * 文章图片简介
      */
     private String description;
-
-    /**
-     * 文章图片宽度，单位：px
-     */
-    private Integer width;
-
-    /**
-     * 文章图片高度，单位：px
-     */
-    private Integer height;
-
-    /**
-     * 排序序号
-     */
-    private Integer sort;
-
-    /**
-     * 数据创建时间
-     */
-    private LocalDateTime gmtCreate;
-
-    /**
-     * 数据最后修改时间
-     */
-    private LocalDateTime gmtModified;
 }
