@@ -141,13 +141,13 @@
 
     <sql id="StandardQueryFields">
         <if test="true">
-            id,category_id,category_name,title,description,content,view_count,sort
+            id,category_id,category_name,title,description,content,view_count,sort,gmt_create,gmt_modified
         </if>
     </sql>
 
     <sql id="ListQueryFields">
         <if test="true">
-            id,category_id,category_name,title,description,content,view_count,sort
+            id,category_id,category_name,title,description,content,view_count,sort,gmt_create,gmt_modified
         </if>
     </sql>
 
@@ -160,6 +160,8 @@
         <result column="content" property="content"/>
         <result column="view_count" property="viewCount"/>
         <result column="sort" property="sort"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
     </resultMap>
 
     <resultMap id="ListResultMap" type="cn.tedu.fitnessClub.pojo.vo.ArticleListItemVO">
@@ -171,6 +173,8 @@
         <result column="content" property="content"/>
         <result column="view_count" property="viewCount"/>
         <result column="sort" property="sort"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
     </resultMap>
 
 

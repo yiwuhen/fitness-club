@@ -124,7 +124,7 @@
     <sql id="StandardQueryFields">
         <if test="true">
             id, name, parent_id, depth,
-            sort, enable, is_parent, is_display
+            sort, enable, is_parent, is_display,gmt_create,gmt_modified
         </if>
     </sql>
 
@@ -137,12 +137,14 @@
         <result column="enable" property="enable"/>
         <result column="is_parent" property="isParent"/>
         <result column="is_display" property="isDisplay"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
     </resultMap>
 
     <sql id="ListQueryFields">
         <if test="true">
             id, name, parent_id, depth,
-            sort, enable, is_parent, is_display
+            sort, enable, is_parent, is_display,gmt_create,gmt_modified
         </if>
     </sql>
 
@@ -155,6 +157,8 @@
         <result column="enable" property="enable"/>
         <result column="is_parent" property="isParent"/>
         <result column="is_display" property="isDisplay"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
     </resultMap>
 
 </mapper>
