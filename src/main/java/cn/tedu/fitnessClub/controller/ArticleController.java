@@ -110,7 +110,7 @@ public class ArticleController {
         return JsonResult.ok(listByCategoryId);
     }
 
-    @PostMapping("/list-by-Page")
+    @GetMapping("/list-by-Page")
     @ApiOperation("查询文章列表并分页")
     @ApiOperationSupport(order = 450)
     public JsonResult<JsonPage<ArticleListItemVO>> list(Integer page, Integer pageSize) {
@@ -119,7 +119,7 @@ public class ArticleController {
         return JsonResult.ok(list);
     }
 
-    @PostMapping("/list-by-categoryIdAndPage")
+    @GetMapping("/list-by-categoryIdAndPage")
     @ApiOperation("根据文章类别查询文章列表并分页")
     @ApiOperationSupport(order = 460)
     public JsonResult<JsonPage<ArticleListItemVO>> list(Long categoryId, Integer page, Integer pageSize) {
@@ -128,7 +128,7 @@ public class ArticleController {
         return JsonResult.ok(list);
     }
 
-    @PostMapping("/list-by-categoryIdsAndPage")
+    @GetMapping("/list-by-categoryIdsAndPage")
     @ApiOperation("根据多个文章类别查询文章列表并分页")
     @ApiOperationSupport(order = 470)
     public JsonResult<JsonPage<ArticleListItemVO>> list(Long[] categoryIds, Integer page, Integer pageSize) {
