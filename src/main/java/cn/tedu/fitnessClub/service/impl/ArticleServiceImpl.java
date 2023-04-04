@@ -7,10 +7,7 @@ import cn.tedu.fitnessClub.mapper.ArticlePictureMapper;
 import cn.tedu.fitnessClub.pojo.dto.ArticleAddNewDTO;
 import cn.tedu.fitnessClub.pojo.dto.ArticleUpdateDTO;
 import cn.tedu.fitnessClub.pojo.entity.Article;
-import cn.tedu.fitnessClub.pojo.vo.ArticleCategoryStandardVO;
-import cn.tedu.fitnessClub.pojo.vo.ArticleListItemVO;
-import cn.tedu.fitnessClub.pojo.vo.ArticlePictureStandardVO;
-import cn.tedu.fitnessClub.pojo.vo.ArticleStandardVO;
+import cn.tedu.fitnessClub.pojo.vo.*;
 import cn.tedu.fitnessClub.restful.JsonPage;
 import cn.tedu.fitnessClub.restful.ServiceCode;
 import cn.tedu.fitnessClub.service.IArticleService;
@@ -173,6 +170,18 @@ public class ArticleServiceImpl implements IArticleService {
     }
 
     @Override
+    public ArticleAndPictureStandardVO getArticleAndPictureStandardById(Long id) {
+        log.debug("开始处理【根据ID查询文章包含图片详情】的业务，参数：{}", id);
+        ArticleAndPictureStandardVO queryResult = articleMapper.getArticleAndPictureStandardById(id);
+        if (queryResult == null) {
+            String message = "查询文章包含图片详情失败，文章数据不存在！";
+            log.warn(message);
+            throw new ServiceException(ServiceCode.ERROR_NOT_FOUND, message);
+        }
+        return queryResult;
+    }
+
+    @Override
     public List<ArticleListItemVO> listByCategoryId(Long categoryId) {
         log.debug("开始处理【根据文章类别查询其文章列表】的业务，参数:{}",categoryId);
         List<ArticleListItemVO> list = articleMapper.listByCategoryId(categoryId);
@@ -181,7 +190,7 @@ public class ArticleServiceImpl implements IArticleService {
 
     @Override
     public List<ArticleListItemVO> listByCategoryIds(Long[] categoryIds) {
-        log.debug("开始处理【根据文章类别查询其文章列表】的业务，参数:{}",categoryIds);
+        log.debug("开始处理【根据多个文章类别查询其文章列表】的业务，参数:{}",categoryIds);
         List<ArticleListItemVO> list = articleMapper.listByCategoryIds(categoryIds);
         return list;
     }
@@ -194,26 +203,28 @@ public class ArticleServiceImpl implements IArticleService {
     }
 
     @Override
-    public JsonPage<ArticleListItemVO> getArticleByCategoryIdsAndPage(Long[] categoryIds, Integer page, Integer pageSize) {
+    public JsonPage<ArticleAndPictureStandardVO> getArticleAndPictureByCategoryIdsAndPage(Long[] categoryIds, Integer page, Integer pageSize) {
         PageHelper.startPage(page,pageSize);
-        log.debug("开始处理【根据多个文章类别查询文章列表并分页】的业务");
-        List<ArticleListItemVO> list = articleMapper.listByCategoryIds(categoryIds);
+        log.debug("开始处理【根据多个文章类别查询文章包含图片列表并分页】的业务");
+        List<ArticleAndPictureStandardVO> list = articleMapper.listAllByCategoryIds(categoryIds);
         return JsonPage.restPage(new PageInfo<>(list));
     }
 
     @Override
-    public JsonPage<ArticleListItemVO> getAllArticlesByPage(Integer page, Integer pageSize) {
+    public JsonPage<ArticleAndPictureStandardVO> getAllArticlesAndPicturesByPage(Integer page, Integer pageSize) {
         PageHelper.startPage(page,pageSize);
-        log.debug("开始处理【根据文章类别查询文章列表并分页】的业务");
-        List<ArticleListItemVO> list = articleMapper.list();
+        log.debug("开始处理【查询全部文章包含图片列表并分页】的业务");
+        List<ArticleAndPictureStandardVO> list = articleMapper.listAll();
         return JsonPage.restPage(new PageInfo<>(list));
     }
 
     @Override
-    public JsonPage<ArticleListItemVO> getArticleByCategoryIdAndPage(Long categoryId, Integer page, Integer pageSize) {
+    public JsonPage<ArticleAndPictureStandardVO> getArticleAndPictureByCategoryIdAndPage(Long categoryId, Integer page, Integer pageSize) {
         PageHelper.startPage(page,pageSize);
-        log.debug("开始处理【根据文章类别查询文章列表并分页】的业务");
-        List<ArticleListItemVO> list = articleMapper.listByCategoryId(categoryId);
+        log.debug("开始处理【根据文章类别查询文章包含图片列表并分页】的业务");
+        List<ArticleAndPictureStandardVO> list = articleMapper.listAllByCategoryId(categoryId);
         return JsonPage.restPage(new PageInfo<>(list));
     }
+
+
 }
