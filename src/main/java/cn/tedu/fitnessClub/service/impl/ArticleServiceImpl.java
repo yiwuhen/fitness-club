@@ -227,62 +227,62 @@ public class ArticleServiceImpl implements IArticleService {
         return JsonPage.restPage(info);
     }
 
-    private Long[] getId(Long categoryId) {
-        List<Long> list1 = new ArrayList<>();
-        List<ArticleCategoryListItemVO> sonsList = articleCategoryMapper.listByParentId(categoryId);
-        if (sonsList.isEmpty()) {
-            Long[] arr = new Long[1];
-            arr[0] = categoryId;
-            return arr;
-        }
-        for (ArticleCategoryListItemVO sonList : sonsList) {
-            if (sonList.getIsParent()==1) {
-                List<ArticleCategoryListItemVO> grandSons = articleCategoryMapper.listByParentId(sonList.getId());
-                for (ArticleCategoryListItemVO grandSon : grandSons) {
-                    list1.add(grandSon.getId());
-                }
-            } else {
-                list1.add(sonList.getId());
-            }
-        }
-        Long[] array= new Long[list1.size()];
-        for(int i=0; i<array.length;i++){
-            array[i] = list1.get(i);
-        }
-        return array;
-    }
+//    private Long[] getId(Long categoryId) {
+//        List<Long> list1 = new ArrayList<>();
+//        List<ArticleCategoryListItemVO> sonsList = articleCategoryMapper.listByParentId(categoryId);
+//        if (sonsList.isEmpty()) {
+//            Long[] arr = new Long[1];
+//            arr[0] = categoryId;
+//            return arr;
+//        }
+//        for (ArticleCategoryListItemVO sonList : sonsList) {
+//            if (sonList.getIsParent()==1) {
+//                List<ArticleCategoryListItemVO> grandSons = articleCategoryMapper.listByParentId(sonList.getId());
+//                for (ArticleCategoryListItemVO grandSon : grandSons) {
+//                    list1.add(grandSon.getId());
+//                }
+//            } else {
+//                list1.add(sonList.getId());
+//            }
+//        }
+//        Long[] array= new Long[list1.size()];
+//        for(int i=0; i<array.length;i++){
+//            array[i] = list1.get(i);
+//        }
+//        return array;
+//    }
 
-    private Long[] getIds(Long categoryId) {
-        List<Long> list1 = new ArrayList<>();
-        List<ArticleCategoryListItemVO> listAll = articleCategoryMapper.list();
-        for (ArticleCategoryListItemVO itemVO : listAll) {
-            if (itemVO.getId()==categoryId) {
-                if (itemVO.getIsParent()==1) {
-                    for (ArticleCategoryListItemVO categoryListItemVO : listAll) {
-                        if (categoryListItemVO.getParentId()==itemVO.getId()) {
-                            if (categoryListItemVO.getIsParent()==1) {
-                                for (ArticleCategoryListItemVO listItemVO : listAll) {
-                                    if (listItemVO.getParentId()==categoryListItemVO.getId()) {
-                                        list1.add(listItemVO.getId());
-                                    }
-                                }
-                            } else {
-                                list1.add(categoryListItemVO.getId());
-                            }
-                        }
-                    }
-                } else {
-                    list1.add(categoryId);
-                }
-            }
-        }
-        Long[] array= new Long[list1.size()];
-        for(int i=0; i<array.length;i++){
-            array[i] = list1.get(i);
-        }
-        return array;
-    }
-    List<Long> list2;
+//    private Long[] getIds(Long categoryId) {
+//        List<Long> list1 = new ArrayList<>();
+//        List<ArticleCategoryListItemVO> listAll = articleCategoryMapper.list();
+//        for (ArticleCategoryListItemVO itemVO : listAll) {
+//            if (itemVO.getId()==categoryId) {
+//                if (itemVO.getIsParent()==1) {
+//                    for (ArticleCategoryListItemVO categoryListItemVO : listAll) {
+//                        if (categoryListItemVO.getParentId()==itemVO.getId()) {
+//                            if (categoryListItemVO.getIsParent()==1) {
+//                                for (ArticleCategoryListItemVO listItemVO : listAll) {
+//                                    if (listItemVO.getParentId()==categoryListItemVO.getId()) {
+//                                        list1.add(listItemVO.getId());
+//                                    }
+//                                }
+//                            } else {
+//                                list1.add(categoryListItemVO.getId());
+//                            }
+//                        }
+//                    }
+//                } else {
+//                    list1.add(categoryId);
+//                }
+//            }
+//        }
+//        Long[] array= new Long[list1.size()];
+//        for(int i=0; i<array.length;i++){
+//            array[i] = list1.get(i);
+//        }
+//        return array;
+//    }
+    List<Long> listItem;
     private void getId1(List<ArticleCategoryListItemVO> list,Long categoryId) {
         for (ArticleCategoryListItemVO categoryListItemVO : list) {
             if (categoryListItemVO.getId()==categoryId) {
@@ -293,7 +293,7 @@ public class ArticleServiceImpl implements IArticleService {
                         }
                     }
                 } else {
-                    list2.add(categoryId);
+                    listItem.add(categoryId);
                     return;
                 }
             }
@@ -301,12 +301,12 @@ public class ArticleServiceImpl implements IArticleService {
     }
 
     private Long[] getIds1(Long categoryId) {
-        list2 = new ArrayList<>();
+        listItem = new ArrayList<>();
         List<ArticleCategoryListItemVO> listAll = articleCategoryMapper.list();
         getId1(listAll,categoryId);
-        Long[] array= new Long[list2.size()];
+        Long[] array= new Long[listItem.size()];
         for(int i=0; i<array.length;i++){
-            array[i] = list2.get(i);
+            array[i] = listItem.get(i);
         }
         return array;
     }
