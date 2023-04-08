@@ -14,14 +14,9 @@ import cn.tedu.fitnessClub.service.IArticlePictureService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -39,18 +34,31 @@ public class ArticlePictureServiceImpl implements IArticlePictureService {
 
     @Override
     public void addNew(ArticlePictureAddNewDTO articlePictureAddNewDTO) {
-        log.debug("开始处理【添加文章图片】的业务，参数：{}", articlePictureAddNewDTO);
+        log.debug("开始处理【将图片添加到数据库】的业务，参数{}", articlePictureAddNewDTO);
+        Long articleId = articlePictureAddNewDTO.getArticleId();
 
-        ArticlePicture articlePicture = new ArticlePicture();
-        BeanUtils.copyProperties(articlePictureAddNewDTO, articlePicture);
+        // 拿articleId查DB有无数据，如果有，则删除后再添加，如果无，则直接添加。
 
-        log.debug("即将执行插入数据，参数：{}", articlePicture);
-        int rows = articlePictureMapper.insert(articlePicture);
-        if (rows != 1) {
-            String message = "添加失败，服务器忙，请稍后再尝试！";
-            log.warn(message);
-            throw new ServiceException(ServiceCode.ERROR_INSERT, message);
+        // 查询DB有无图片数据
+        int row = articlePictureMapper.countByArticleId(articleId);
+        log.debug("根据文章id【{}】查询数据库中有【{}】条对应数据",articleId,row);
+        if (row != 0){
+            // 删掉DB中的图片
+            articlePictureMapper.deleteByArticleId(articleId);
+            log.debug("数据库中存在图片信息，即将删除【{}】的信息！",articleId);
         }
+        // 取出DTO的url
+        String url = articlePictureAddNewDTO.getUrl();
+        if (url=="") return;
+        log.debug("取出了写入图片的url【{}】：",url);
+        // new一个图片对象并传值
+        ArticlePicture articlePicture = new ArticlePicture();
+        articlePicture.setArticleId(articleId);
+        articlePicture.setUrl(url);
+        log.debug("将DTO的信息写入ArticlePicture",articlePicture);
+        // 写入DB
+        articlePictureMapper.insert(articlePicture);
+        log.debug("【将图片添加到数据库】业务处理完毕！");
     }
 
     @Override
@@ -95,9 +103,12 @@ public class ArticlePictureServiceImpl implements IArticlePictureService {
     // 当前端点击删除封面按钮时，后端执行删除静态资源文件夹内的封面图片的方法
     // 根据isDelDB属性来决定是否对数据库发送【删除图片url】请求
     @Override
-    public void deleteCoverByIsDelDB(ArticlePictureDeleteCoverDTO articlePictureDeleteCoverDTO) {
+    public String deleteCoverByIsDelDB(ArticlePictureDeleteCoverDTO articlePictureDeleteCoverDTO) {
         log.debug("开始处理【删除静态资源文件夹内的封面图片】的业务，参数：{}", articlePictureDeleteCoverDTO);
-        String subSrc = articlePictureDeleteCoverDTO.getUrl().substring("http://localhost:10001/".length()); // .substring("")
+        String subSrc = "";
+        if (articlePictureDeleteCoverDTO.getUrl().startsWith("http://localhost:10001/")) {
+            subSrc = articlePictureDeleteCoverDTO.getUrl().substring("http://localhost:10001/".length()); // .substring("")
+        }
         log.debug("去除localhost后的路径是：{}", subSrc);
         String filePath3 = projectPath + UPLOAD_PATH_PREFIX + subSrc;
         String filePath4 = filePath3.replace("\\", "/");
@@ -114,16 +125,22 @@ public class ArticlePictureServiceImpl implements IArticlePictureService {
         // 0=不删除……
         //
         if (articlePictureDeleteCoverDTO.getIsDelDB() == 1) {
-            // 根据article_id查询封面图片id
-            Long picId = articlePictureMapper.selectPictureIdByArticleId(articlePictureDeleteCoverDTO.getArticleId());
-            // 拿图片id去删除
-            int rows = articlePictureMapper.deleteById(picId);
-            if (rows != 1) {
+            int count = articlePictureMapper.countByArticleId(articlePictureDeleteCoverDTO.getArticleId());
+            if (count == 0) return "数据库里没有了";
+            // 得到url
+            String url = (articlePictureMapper.getStandardByArticleId(articlePictureDeleteCoverDTO.getArticleId())).getUrl();
+            // 拿文章id去删除
+            int rows = articlePictureMapper.deleteByArticleId(articlePictureDeleteCoverDTO.getArticleId());
+            if (rows >= 1) {
+                log.debug("检测到isDelDB=1，删除对应URL成功！");
+            } else {
                 String message = "删除失败，服务器忙，请稍后再尝试！";
                 log.warn(message);
                 throw new ServiceException(ServiceCode.ERROR_DELETE, message);
             }
+            return url;
         }
+        return "OK";
     }
 
     @Override
@@ -157,11 +174,11 @@ public class ArticlePictureServiceImpl implements IArticlePictureService {
     }
 
     @Override
-    public ArticlePictureStandardVO getStandardByArticleId(Long articleId){
+    public ArticlePictureStandardVO getStandardByArticleId(Long articleId) {
         log.debug("开始处理【根据文章ID查询文章图片详情】的业务，参数：{}", articleId);
-        ArticlePictureStandardVO queryResult = articlePictureMapper.getStandardById(articleId);
+        ArticlePictureStandardVO queryResult = articlePictureMapper.getStandardByArticleId(articleId);
         if (queryResult == null) {
-            String message = "查询文章详情失败，文章数据不存在！";
+            String message = "查询封面失败，图片数据不存在！";
             log.warn(message);
             throw new ServiceException(ServiceCode.ERROR_NOT_FOUND, message);
         }

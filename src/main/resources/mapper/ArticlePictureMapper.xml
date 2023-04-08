@@ -37,6 +37,11 @@
             </foreach>
         )
     </delete>
+    <!--int deleteByArticleId(Long id);-->
+    <!--根据文章id删除图片-->
+    <delete id="deleteByArticleId">
+        DELETE FROM bms_article_picture WHERE article_id=#{articleId}
+    </delete>
 
     <!-- int update(ArticlePicture picture); -->
     <update id="update">

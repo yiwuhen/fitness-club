@@ -101,9 +101,19 @@ public class ArticlePictureController {
         return JsonResult.ok(queryResult);
     }
 
+    @GetMapping("/{id:[0-9]+}/cover")
+    @ApiOperation("根据文章ID查询文章图片详情")
+    @ApiOperationSupport(order = 420)
+    public JsonResult<ArticlePictureStandardVO> getStandardByArticleId(
+            @PathVariable @Range(min = 1, message = "请提交有效的ID值！") Long id) {
+        log.debug("开始处理【根据文章ID查询文章图片详情】的请求，参数：{}", id);
+        ArticlePictureStandardVO queryResult = articlePictureService.getStandardByArticleId(id);
+        return JsonResult.ok(queryResult);
+    }
+
     @GetMapping("")
     @ApiOperation("查询文章图片列表")
-    @ApiOperationSupport(order = 420)
+    @ApiOperationSupport(order = 430)
     public JsonResult<List<ArticlePictureListItemVO>> list() {
         log.debug("开始处理【查询文章图片列表】的请求，无参数");
         List<ArticlePictureListItemVO> list = articlePictureService.list();
@@ -112,7 +122,7 @@ public class ArticlePictureController {
 
     @GetMapping("/{id:[0-9]+}/list")
     @ApiOperation("根据文章图片类别查询文章图片列表")
-    @ApiOperationSupport(order = 430)
+    @ApiOperationSupport(order = 440)
     public JsonResult<List<ArticlePictureListItemVO>> listByCategoryId(
             @PathVariable("id") @Range(min = 1, message = "请提交有效的ID值！") Long articleId
     ) {

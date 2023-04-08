@@ -43,7 +43,7 @@ public interface IArticlePictureService {
     /**
      * 删除封面
      */
-    void deleteCoverByIsDelDB(ArticlePictureDeleteCoverDTO articlePictureDeleteCoverDTO);
+    String deleteCoverByIsDelDB(ArticlePictureDeleteCoverDTO articlePictureDeleteCoverDTO);
 
     /**
      * 修改文章图片数据

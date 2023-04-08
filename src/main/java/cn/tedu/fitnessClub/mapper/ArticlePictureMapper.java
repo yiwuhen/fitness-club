@@ -49,6 +49,8 @@ public interface ArticlePictureMapper {
      */
     int deleteByIds(Long[] ids);
 
+    int deleteByArticleId(Long id);
+
     /**
      * 更新文章图片数据
      *
