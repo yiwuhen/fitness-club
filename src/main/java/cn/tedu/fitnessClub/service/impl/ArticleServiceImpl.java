@@ -161,6 +161,7 @@ public class ArticleServiceImpl implements IArticleService {
 
     @Override
     public ArticleStandardVO getStandardById(Long id) {
+        articleMapper.updateViewCountById(id);
         log.debug("开始处理【根据ID查询文章详情】的业务，参数：{}", id);
         ArticleStandardVO queryResult = articleMapper.getStandardById(id);
         if (queryResult == null) {
@@ -204,8 +205,6 @@ public class ArticleServiceImpl implements IArticleService {
         return list;
     }
 
-
-
     @Override
     public JsonPage<ArticleAndPictureStandardVO> getAllArticlesAndPicturesByPage(Integer page, Integer pageSize) {
         PageHelper.startPage(page,pageSize);
@@ -216,29 +215,103 @@ public class ArticleServiceImpl implements IArticleService {
 
     @Override
     public JsonPage<ArticleAndPictureStandardVO> getArticleAndPictureByCategoryIdAndPage(Long categoryId, Integer page, Integer pageSize) {
+        log.debug("页码:{},每页条数{}",page,pageSize);
+        Long[] ids = getIds1(categoryId);
+        log.debug("数组为:{}",ids);
+        log.debug("开始处理【根据文章类别查询文章包含图片列表并分页】的业务");
         PageHelper.startPage(page,pageSize);
+        List<ArticleAndPictureStandardVO> list = articleMapper.listAllByCategoryIds(ids);
+        log.debug("开始处理【根据文章类别查询文章包含图片列表并分页】的业务,查出的文章为:{}",list);
+        PageInfo<ArticleAndPictureStandardVO> info = new PageInfo<>(list);
+        log.debug("分页信息为:{}",info);
+        return JsonPage.restPage(info);
+    }
+
+    private Long[] getId(Long categoryId) {
+        List<Long> list1 = new ArrayList<>();
         List<ArticleCategoryListItemVO> sonsList = articleCategoryMapper.listByParentId(categoryId);
-        if (!sonsList.isEmpty()) {
-            List<ArticleAndPictureStandardVO> list = new ArrayList<>();
-            for (ArticleCategoryListItemVO sonList : sonsList) {
-                List<ArticleCategoryListItemVO> grandSonsList = articleCategoryMapper.listByParentId(sonList.getId());
-                if (!grandSonsList.isEmpty()) {
-                    for (ArticleCategoryListItemVO grandSonList : grandSonsList) {
-                        List<ArticleAndPictureStandardVO> list1 = articleMapper.listAllByCategoryId(grandSonList.getId());
-                        list.addAll(list1);
+        if (sonsList.isEmpty()) {
+            Long[] arr = new Long[1];
+            arr[0] = categoryId;
+            return arr;
+        }
+        for (ArticleCategoryListItemVO sonList : sonsList) {
+            if (sonList.getIsParent()==1) {
+                List<ArticleCategoryListItemVO> grandSons = articleCategoryMapper.listByParentId(sonList.getId());
+                for (ArticleCategoryListItemVO grandSon : grandSons) {
+                    list1.add(grandSon.getId());
+                }
+            } else {
+                list1.add(sonList.getId());
+            }
+        }
+        Long[] array= new Long[list1.size()];
+        for(int i=0; i<array.length;i++){
+            array[i] = list1.get(i);
+        }
+        return array;
+    }
+
+    private Long[] getIds(Long categoryId) {
+        List<Long> list1 = new ArrayList<>();
+        List<ArticleCategoryListItemVO> listAll = articleCategoryMapper.list();
+        for (ArticleCategoryListItemVO itemVO : listAll) {
+            if (itemVO.getId()==categoryId) {
+                if (itemVO.getIsParent()==1) {
+                    for (ArticleCategoryListItemVO categoryListItemVO : listAll) {
+                        if (categoryListItemVO.getParentId()==itemVO.getId()) {
+                            if (categoryListItemVO.getIsParent()==1) {
+                                for (ArticleCategoryListItemVO listItemVO : listAll) {
+                                    if (listItemVO.getParentId()==categoryListItemVO.getId()) {
+                                        list1.add(listItemVO.getId());
+                                    }
+                                }
+                            } else {
+                                list1.add(categoryListItemVO.getId());
+                            }
+                        }
                     }
                 } else {
-                    List<ArticleAndPictureStandardVO> list1 = articleMapper.listAllByCategoryId(sonList.getId());
-                    list.addAll(list1);
+                    list1.add(categoryId);
                 }
             }
-            return JsonPage.restPage(new PageInfo<>(list));
         }
-        log.debug("开始处理【根据文章类别查询文章包含图片列表并分页】的业务");
-        List<ArticleAndPictureStandardVO> list = articleMapper.listAllByCategoryId(categoryId);
-        log.debug("开始处理【根据文章类别查询文章包含图片列表并分页】的业务,查出的文章为:{}",list);
-        return JsonPage.restPage(new PageInfo<>(list));
+        Long[] array= new Long[list1.size()];
+        for(int i=0; i<array.length;i++){
+            array[i] = list1.get(i);
+        }
+        return array;
     }
+    List<Long> list2;
+    private void getId1(List<ArticleCategoryListItemVO> list,Long categoryId) {
+        for (ArticleCategoryListItemVO categoryListItemVO : list) {
+            if (categoryListItemVO.getId()==categoryId) {
+                if (categoryListItemVO.getIsParent()==1) {
+                    for (ArticleCategoryListItemVO articleCategoryListItemVO : list) {
+                        if (articleCategoryListItemVO.getParentId()==categoryListItemVO.getId()) {
+                            getId1(list,articleCategoryListItemVO.getId());
+                        }
+                    }
+                } else {
+                    list2.add(categoryId);
+                    return;
+                }
+            }
+        }
+    }
+
+    private Long[] getIds1(Long categoryId) {
+        list2 = new ArrayList<>();
+        List<ArticleCategoryListItemVO> listAll = articleCategoryMapper.list();
+        getId1(listAll,categoryId);
+        Long[] array= new Long[list2.size()];
+        for(int i=0; i<array.length;i++){
+            array[i] = list2.get(i);
+        }
+        return array;
+    }
+
+
 
 
 }

@@ -66,6 +66,10 @@
         WHERE id=#{id}
     </update>
 
+    <!-- int updateViewCountById(Long id); -->
+    <update id="updateViewCountById">
+    UPDATE bms_article SET view_count = view_count+1 WHERE id=#{id}
+    </update>
     <!-- int count(); -->
     <select id="count" resultType="int">
         SELECT count(*)
@@ -106,13 +110,20 @@
 
     <!-- ArticleAndPictureStandardVO getArticleAndPictureStandardById(Long id); -->
     <select id="getArticleAndPictureStandardById" resultMap="ArticleAndPictureStandardResultMap">
-        SELECT bms_article.id, bms_article.category_id, bms_article.category_name, bms_article.title,
-               bms_article.description, bms_article.content, bms_article.view_count, bms_article.sort,
-               bms_article.gmt_create, bms_article.gmt_modified, bap.url
-        FROM
-        bms_article JOIN bms_article_picture bap on bms_article.id = bap.article_id
-        WHERE
-        bms_article.id=#{id}
+        SELECT bms_article.id,
+               bms_article.category_id,
+               bms_article.category_name,
+               bms_article.title,
+               bms_article.description,
+               bms_article.content,
+               bms_article.view_count,
+               bms_article.sort,
+               bms_article.gmt_create,
+               bms_article.gmt_modified,
+               bap.url
+        FROM bms_article
+                 JOIN bms_article_picture bap on bms_article.id = bap.article_id
+        WHERE bms_article.id = #{id}
     </select>
 
     <!-- List<ArticleListItemVO> listByCategoryId(Long categoryId); -->
@@ -129,15 +140,21 @@
 
     <!-- List<ArticleAndPictureStandardVO> listAllByCategoryId(Long categoryId); -->
     <select id="listAllByCategoryId" resultMap="ArticleAndPictureStandardResultMap">
-        SELECT bms_article.id, bms_article.category_id, bms_article.category_name, bms_article.title,
-               bms_article.description, bms_article.content, bms_article.view_count, bms_article.sort,
-               bms_article.gmt_create, bms_article.gmt_modified, bap.url
-        FROM
-            bms_article JOIN bms_article_picture bap on bms_article.id = bap.article_id
-        WHERE
-        category_id=#{categoryId}
-        ORDER BY
-        sort DESC, id DESC
+        SELECT bms_article.id,
+               bms_article.category_id,
+               bms_article.category_name,
+               bms_article.title,
+               bms_article.description,
+               bms_article.content,
+               bms_article.view_count,
+               bms_article.sort,
+               bms_article.gmt_create,
+               bms_article.gmt_modified,
+               bap.url
+        FROM bms_article
+                 JOIN bms_article_picture bap on bms_article.id = bap.article_id
+        WHERE category_id = #{categoryId}
+        ORDER BY sort DESC, id DESC
     </select>
 
     <!-- List<ArticleListItemVO> listByCategoryIds(Long[] categoryIds); -->
@@ -148,16 +165,16 @@
         bms_article
         WHERE
         category_id in (
-            <foreach collection="array" item="categoryId" separator=",">
+        <foreach collection="array" item="categoryId" separator=",">
             #{categoryId}
-            </foreach>
-            )
+        </foreach>
+        )
         ORDER BY
         sort DESC, id DESC
     </select>
 
-    <!-- List<ArticleAndPictureStandardVO> listAllByCategoryIds(Long[] categoryIds); -->
-    <!--<select id="listAllByCategoryIds" resultMap="ArticleAndPictureStandardResultMap">
+    <!--List<ArticleAndPictureStandardVO> listAllByCategoryIds(Long[] categoryIds); -->
+    <select id="listAllByCategoryIds" resultMap="ArticleAndPictureStandardResultMap">
         SELECT bms_article.id, bms_article.category_id, bms_article.category_name, bms_article.title,
         bms_article.description, bms_article.content, bms_article.view_count, bms_article.sort,
         bms_article.gmt_create, bms_article.gmt_modified, bap.url
@@ -170,8 +187,8 @@
         </foreach>
         )
         ORDER BY
-        sort DESC, id DESC
-    </select>-->
+        sort DESC, bms_article.id DESC
+    </select>
 
     <!-- List<ArticleListItemVO> list(); -->
     <select id="list" resultMap="ListResultMap">
@@ -185,13 +202,20 @@
 
     <!-- List<ArticleAndPictureStandardVO> listAll(); -->
     <select id="listAll" resultMap="ArticleAndPictureStandardResultMap">
-        SELECT bms_article.id, bms_article.category_id, bms_article.category_name, bms_article.title,
-               bms_article.description, bms_article.content, bms_article.view_count, bms_article.sort,
-               bms_article.gmt_create, bms_article.gmt_modified, bap.url
-        FROM
-            bms_article JOIN bms_article_picture bap on bms_article.id = bap.article_id
-        ORDER BY
-        sort DESC, id DESC
+        SELECT bms_article.id,
+               bms_article.category_id,
+               bms_article.category_name,
+               bms_article.title,
+               bms_article.description,
+               bms_article.content,
+               bms_article.view_count,
+               bms_article.sort,
+               bms_article.gmt_create,
+               bms_article.gmt_modified,
+               bap.url
+        FROM bms_article
+                 JOIN bms_article_picture bap on bms_article.id = bap.article_id
+        ORDER BY sort DESC, id DESC
     </select>
 
     <sql id="StandardQueryFields">
