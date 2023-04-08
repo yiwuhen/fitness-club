@@ -216,7 +216,7 @@ public class ArticleServiceImpl implements IArticleService {
     @Override
     public JsonPage<ArticleAndPictureStandardVO> getArticleAndPictureByCategoryIdAndPage(Long categoryId, Integer page, Integer pageSize) {
         log.debug("页码:{},每页条数{}",page,pageSize);
-        Long[] ids = getIds1(categoryId);
+        Long[] ids = getIds(categoryId);
         log.debug("数组为:{}",ids);
         log.debug("开始处理【根据文章类别查询文章包含图片列表并分页】的业务");
         PageHelper.startPage(page,pageSize);
@@ -283,13 +283,13 @@ public class ArticleServiceImpl implements IArticleService {
 //        return array;
 //    }
     List<Long> listItem;
-    private void getId1(List<ArticleCategoryListItemVO> list,Long categoryId) {
+    private void getId(List<ArticleCategoryListItemVO> list,Long categoryId) {
         for (ArticleCategoryListItemVO categoryListItemVO : list) {
             if (categoryListItemVO.getId()==categoryId) {
                 if (categoryListItemVO.getIsParent()==1) {
                     for (ArticleCategoryListItemVO articleCategoryListItemVO : list) {
                         if (articleCategoryListItemVO.getParentId()==categoryListItemVO.getId()) {
-                            getId1(list,articleCategoryListItemVO.getId());
+                            getId(list,articleCategoryListItemVO.getId());
                         }
                     }
                 } else {
@@ -300,10 +300,10 @@ public class ArticleServiceImpl implements IArticleService {
         }
     }
 
-    private Long[] getIds1(Long categoryId) {
+    private Long[] getIds(Long categoryId) {
         listItem = new ArrayList<>();
         List<ArticleCategoryListItemVO> listAll = articleCategoryMapper.list();
-        getId1(listAll,categoryId);
+        getId(listAll,categoryId);
         Long[] array= new Long[listItem.size()];
         for(int i=0; i<array.length;i++){
             array[i] = listItem.get(i);
