@@ -101,12 +101,36 @@
         id=#{id}
     </select>
 
+    <!-- ArticleAndPictureStandardVO getArticleAndPictureStandardById(Long id); -->
+    <select id="getArticleAndPictureStandardById" resultMap="ArticleAndPictureStandardResultMap">
+        SELECT bms_article.id, bms_article.category_id, bms_article.category_name, bms_article.title,
+               bms_article.description, bms_article.content, bms_article.view_count, bms_article.sort,
+               bms_article.gmt_create, bms_article.gmt_modified, bap.url
+        FROM
+        bms_article JOIN bms_article_picture bap on bms_article.id = bap.article_id
+        WHERE
+        bms_article.id=#{id}
+    </select>
+
     <!-- List<ArticleListItemVO> listByCategoryId(Long categoryId); -->
     <select id="listByCategoryId" resultMap="ListResultMap">
         SELECT
         <include refid="ListQueryFields"/>
         FROM
         bms_article
+        WHERE
+        category_id=#{categoryId}
+        ORDER BY
+        sort DESC, id DESC
+    </select>
+
+    <!-- List<ArticleAndPictureStandardVO> listAllByCategoryId(Long categoryId); -->
+    <select id="listAllByCategoryId" resultMap="ArticleAndPictureStandardResultMap">
+        SELECT bms_article.id, bms_article.category_id, bms_article.category_name, bms_article.title,
+               bms_article.description, bms_article.content, bms_article.view_count, bms_article.sort,
+               bms_article.gmt_create, bms_article.gmt_modified, bap.url
+        FROM
+            bms_article JOIN bms_article_picture bap on bms_article.id = bap.article_id
         WHERE
         category_id=#{categoryId}
         ORDER BY
@@ -129,6 +153,23 @@
         sort DESC, id DESC
     </select>
 
+    <!-- List<ArticleAndPictureStandardVO> listAllByCategoryIds(Long[] categoryIds); -->
+    <select id="listAllByCategoryIds" resultMap="ArticleAndPictureStandardResultMap">
+        SELECT bms_article.id, bms_article.category_id, bms_article.category_name, bms_article.title,
+        bms_article.description, bms_article.content, bms_article.view_count, bms_article.sort,
+        bms_article.gmt_create, bms_article.gmt_modified, bap.url
+        FROM
+        bms_article JOIN bms_article_picture bap on bms_article.id = bap.article_id
+        WHERE
+        category_id in (
+        <foreach collection="array" item="categoryId" separator=",">
+            #{categoryId}
+        </foreach>
+        )
+        ORDER BY
+        sort DESC, id DESC
+    </select>
+
     <!-- List<ArticleListItemVO> list(); -->
     <select id="list" resultMap="ListResultMap">
         SELECT
@@ -139,15 +180,26 @@
         sort DESC, id DESC
     </select>
 
+    <!-- List<ArticleAndPictureStandardVO> listAll(); -->
+    <select id="listAll" resultMap="ArticleAndPictureStandardResultMap">
+        SELECT bms_article.id, bms_article.category_id, bms_article.category_name, bms_article.title,
+               bms_article.description, bms_article.content, bms_article.view_count, bms_article.sort,
+               bms_article.gmt_create, bms_article.gmt_modified, bap.url
+        FROM
+            bms_article JOIN bms_article_picture bap on bms_article.id = bap.article_id
+        ORDER BY
+        sort DESC, id DESC
+    </select>
+
     <sql id="StandardQueryFields">
         <if test="true">
-            id,category_id,category_name,title,description,content,view_count,sort
+            id,category_id,category_name,title,description,content,view_count,sort,gmt_create,gmt_modified
         </if>
     </sql>
 
     <sql id="ListQueryFields">
         <if test="true">
-            id,category_id,category_name,title,description,content,view_count,sort
+            id,category_id,category_name,title,description,content,view_count,sort,gmt_create,gmt_modified
         </if>
     </sql>
 
@@ -160,6 +212,8 @@
         <result column="content" property="content"/>
         <result column="view_count" property="viewCount"/>
         <result column="sort" property="sort"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
     </resultMap>
 
     <resultMap id="ListResultMap" type="cn.tedu.fitnessClub.pojo.vo.ArticleListItemVO">
@@ -171,6 +225,22 @@
         <result column="content" property="content"/>
         <result column="view_count" property="viewCount"/>
         <result column="sort" property="sort"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+    </resultMap>
+
+    <resultMap id="ArticleAndPictureStandardResultMap" type="cn.tedu.fitnessClub.pojo.vo.ArticleAndPictureStandardVO">
+        <id column="id" property="id"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="category_name" property="categoryName"/>
+        <result column="title" property="title"/>
+        <result column="description" property="description"/>
+        <result column="content" property="content"/>
+        <result column="view_count" property="viewCount"/>
+        <result column="sort" property="sort"/>
+        <result column="url" property="url"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
     </resultMap>
 
 

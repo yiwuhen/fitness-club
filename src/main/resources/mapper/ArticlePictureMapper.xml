@@ -132,7 +132,7 @@
 
     <sql id="StandardQueryFields">
         <if test="true">
-            id, article_id, url, description, width, height, is_cover, sort
+            id, article_id, url, description, width, height, is_cover, sort,gmt_create,gmt_modified
         </if>
     </sql>
 
@@ -145,11 +145,13 @@
         <result column="height" property="height"/>
         <result column="is_cover" property="isCover"/>
         <result column="sort" property="sort"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
     </resultMap>
 
     <sql id="ListQueryFields">
         <if test="true">
-            id, article_id, url, description, width, height, is_cover, sort
+            id, article_id, url, description, width, height, is_cover, sort,gmt_create,gmt_modified
         </if>
     </sql>
 
@@ -162,6 +164,8 @@
         <result column="height" property="height"/>
         <result column="is_cover" property="isCover"/>
         <result column="sort" property="sort"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
     </resultMap>
 
 </mapper>

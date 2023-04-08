@@ -2,6 +2,7 @@ package cn.tedu.fitnessClub.controller;
 
 import cn.tedu.fitnessClub.pojo.dto.ArticleAddNewDTO;
 import cn.tedu.fitnessClub.pojo.dto.ArticleUpdateDTO;
+import cn.tedu.fitnessClub.pojo.vo.ArticleAndPictureStandardVO;
 import cn.tedu.fitnessClub.pojo.vo.ArticleListItemVO;
 import cn.tedu.fitnessClub.pojo.vo.ArticleStandardVO;
 import cn.tedu.fitnessClub.restful.JsonPage;
@@ -81,6 +82,16 @@ public class ArticleController {
         return JsonResult.ok(queryResult);
     }
 
+    @GetMapping("/picture/{id:[0-9]+}")
+    @ApiOperation("根据ID查询文章包含图片详情")
+    @ApiOperationSupport(order = 415)
+    public JsonResult<ArticleAndPictureStandardVO> getArticleAndPictureStandardById(
+            @PathVariable @Range(min = 1, message = "请提交有效的ID值！") Long id) {
+        log.debug("开始处理【根据ID查询文章包含图片详情】的请求，参数：{}", id);
+        ArticleAndPictureStandardVO queryResult = articleService.getArticleAndPictureStandardById(id);
+        return JsonResult.ok(queryResult);
+    }
+
     @GetMapping("")
     @ApiOperation("查询文章列表")
     @ApiOperationSupport(order = 420)
@@ -110,30 +121,30 @@ public class ArticleController {
         return JsonResult.ok(listByCategoryId);
     }
 
-    @PostMapping("/list-by-Page")
-    @ApiOperation("查询文章列表并分页")
+    @GetMapping("/listAll-by-Page")
+    @ApiOperation("查询文章包含图片列表并分页")
     @ApiOperationSupport(order = 450)
-    public JsonResult<JsonPage<ArticleListItemVO>> list(Integer page, Integer pageSize) {
-        log.debug("开始处理【根据文章类别查询文章列表并分页】的请求");
-        JsonPage<ArticleListItemVO> list = articleService.getAllArticlesByPage(page,pageSize);
+    public JsonResult<JsonPage<ArticleAndPictureStandardVO>> list(Integer page, Integer pageSize) {
+        log.debug("开始处理【查询文章包含图片列表并分页】的请求");
+        JsonPage<ArticleAndPictureStandardVO> list = articleService.getAllArticlesAndPicturesByPage(page,pageSize);
         return JsonResult.ok(list);
     }
 
-    @PostMapping("/list-by-categoryIdAndPage")
-    @ApiOperation("根据文章类别查询文章列表并分页")
+    @GetMapping("/list-by-categoryIdAndPage")
+    @ApiOperation("根据文章类别查询文章列表包含图片并分页")
     @ApiOperationSupport(order = 460)
-    public JsonResult<JsonPage<ArticleListItemVO>> list(Long categoryId, Integer page, Integer pageSize) {
-        log.debug("开始处理【根据文章类别查询文章列表并分页】的请求");
-        JsonPage<ArticleListItemVO> list = articleService.getArticleByCategoryIdAndPage(categoryId,page,pageSize);
+    public JsonResult<JsonPage<ArticleAndPictureStandardVO>> list(Long categoryId, Integer page, Integer pageSize) {
+        log.debug("开始处理【根据文章类别查询文章包含图片列表并分页】的请求");
+        JsonPage<ArticleAndPictureStandardVO> list = articleService.getArticleAndPictureByCategoryIdAndPage(categoryId,page,pageSize);
         return JsonResult.ok(list);
     }
 
-    @PostMapping("/list-by-categoryIdsAndPage")
-    @ApiOperation("根据多个文章类别查询文章列表并分页")
+    @GetMapping("/list-by-categoryIdsAndPage")
+    @ApiOperation("根据多个文章类别查询文章包含图片列表并分页")
     @ApiOperationSupport(order = 470)
-    public JsonResult<JsonPage<ArticleListItemVO>> list(Long[] categoryIds, Integer page, Integer pageSize) {
-        log.debug("开始处理【根据多个文章类别查询文章列表并分页】的请求");
-        JsonPage<ArticleListItemVO> list = articleService.getArticleByCategoryIdsAndPage(categoryIds,page,pageSize);
+    public JsonResult<JsonPage<ArticleAndPictureStandardVO>> list(Long[] categoryIds, Integer page, Integer pageSize) {
+        log.debug("开始处理【根据多个文章类别查询文章包含图片列表并分页】的请求");
+        JsonPage<ArticleAndPictureStandardVO> list = articleService.getArticleAndPictureByCategoryIdsAndPage(categoryIds,page,pageSize);
         return JsonResult.ok(list);
     }
 }

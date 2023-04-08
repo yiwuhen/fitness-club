@@ -1,6 +1,7 @@
 package cn.tedu.fitnessClub.mapper;
 
 import cn.tedu.fitnessClub.pojo.entity.Article;
+import cn.tedu.fitnessClub.pojo.vo.ArticleAndPictureStandardVO;
 import cn.tedu.fitnessClub.pojo.vo.ArticleListItemVO;
 import cn.tedu.fitnessClub.pojo.vo.ArticleStandardVO;
 import org.apache.ibatis.annotations.Param;
@@ -98,12 +99,28 @@ public interface ArticleMapper {
     ArticleStandardVO getStandardById(Long id);
 
     /**
+     * 根据id查询文章和图片数据详情
+     *
+     * @param id 文章id
+     * @return 匹配的文章和图片数据详情，如果没有匹配的数据，则返回null
+     */
+    ArticleAndPictureStandardVO getArticleAndPictureStandardById(Long id);
+
+    /**
      * 根据categoryId查询文章列表
      *
      * @param categoryId 类别id
      * @return 该类别id对应文章数据列表
      */
     List<ArticleListItemVO> listByCategoryId(Long categoryId);
+
+    /**
+     * 根据categoryId查询文章包含图片列表
+     *
+     * @param categoryId 类别id
+     * @return 该类别id对应文章包含图片数据列表
+     */
+    List<ArticleAndPictureStandardVO> listAllByCategoryId(Long categoryId);
 
     /**
      * 根据多个categoryId查询文章列表
@@ -114,10 +131,25 @@ public interface ArticleMapper {
     List<ArticleListItemVO> listByCategoryIds(Long[] categoryIds);
 
     /**
+     * 根据多个categoryId查询文章包含图片列表
+     *
+     * @param categoryIds 多个类别id
+     * @return 该类别id对应文章包含图片数据列表
+     */
+    List<ArticleAndPictureStandardVO> listAllByCategoryIds(Long[] categoryIds);
+
+    /**
      * 查询文章数据列表
      *
      * @return 文章数据列表
      */
     List<ArticleListItemVO> list();
+
+    /**
+     * 查询文章包含图片数据列表
+     *
+     * @return 文章包含图片数据列表
+     */
+    List<ArticleAndPictureStandardVO> listAll();
 
 }
