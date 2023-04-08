@@ -139,12 +139,5 @@ public class ArticleController {
         return JsonResult.ok(list);
     }
 
-    @GetMapping("/list-by-categoryIdsAndPage")
-    @ApiOperation("根据多个文章类别查询文章包含图片列表并分页")
-    @ApiOperationSupport(order = 470)
-    public JsonResult<JsonPage<ArticleAndPictureStandardVO>> list(Long[] categoryIds, Integer page, Integer pageSize) {
-        log.debug("开始处理【根据多个文章类别查询文章包含图片列表并分页】的请求");
-        JsonPage<ArticleAndPictureStandardVO> list = articleService.getArticleAndPictureByCategoryIdsAndPage(categoryIds,page,pageSize);
-        return JsonResult.ok(list);
-    }
+
 }

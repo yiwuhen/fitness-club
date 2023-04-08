@@ -5,9 +5,9 @@
 
     <!-- int insert(Article article); -->
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO bms_article (category_id, category_name, title, description, content, sort)
+        INSERT INTO bms_article (category_id, category_name, title, description, content, sort, view_count)
         VALUES (#{categoryId}, #{categoryName}, #{title}, #{description},
-                #{content}, #{sort})
+                #{content}, #{sort}, #{viewCount})
     </insert>
 
     <!-- int insertBatch(List<Article> articleList); -->
@@ -41,6 +41,9 @@
     <update id="update">
         UPDATE bms_article
         <set>
+            <if test="viewCount != viewCount">
+                view_count=#{viewCount},
+            </if>
             <if test="title != null">
                 title=#{title},
             </if>
@@ -154,7 +157,7 @@
     </select>
 
     <!-- List<ArticleAndPictureStandardVO> listAllByCategoryIds(Long[] categoryIds); -->
-    <select id="listAllByCategoryIds" resultMap="ArticleAndPictureStandardResultMap">
+    <!--<select id="listAllByCategoryIds" resultMap="ArticleAndPictureStandardResultMap">
         SELECT bms_article.id, bms_article.category_id, bms_article.category_name, bms_article.title,
         bms_article.description, bms_article.content, bms_article.view_count, bms_article.sort,
         bms_article.gmt_create, bms_article.gmt_modified, bap.url
@@ -168,7 +171,7 @@
         )
         ORDER BY
         sort DESC, id DESC
-    </select>
+    </select>-->
 
     <!-- List<ArticleListItemVO> list(); -->
     <select id="list" resultMap="ListResultMap">

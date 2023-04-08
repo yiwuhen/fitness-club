@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -59,6 +60,7 @@ public class ArticleServiceImpl implements IArticleService {
         Article article = new Article();
         BeanUtils.copyProperties(articleAddNewDTO, article);
         article.setCategoryName(categoryName);
+        article.setViewCount(0L);
         log.debug("即将执行插入数据，参数：{}", article);
         int rows = articleMapper.insert(article);
         if (rows != 1) {
@@ -202,13 +204,7 @@ public class ArticleServiceImpl implements IArticleService {
         return list;
     }
 
-    @Override
-    public JsonPage<ArticleAndPictureStandardVO> getArticleAndPictureByCategoryIdsAndPage(Long[] categoryIds, Integer page, Integer pageSize) {
-        PageHelper.startPage(page,pageSize);
-        log.debug("开始处理【根据多个文章类别查询文章包含图片列表并分页】的业务");
-        List<ArticleAndPictureStandardVO> list = articleMapper.listAllByCategoryIds(categoryIds);
-        return JsonPage.restPage(new PageInfo<>(list));
-    }
+
 
     @Override
     public JsonPage<ArticleAndPictureStandardVO> getAllArticlesAndPicturesByPage(Integer page, Integer pageSize) {
@@ -221,8 +217,26 @@ public class ArticleServiceImpl implements IArticleService {
     @Override
     public JsonPage<ArticleAndPictureStandardVO> getArticleAndPictureByCategoryIdAndPage(Long categoryId, Integer page, Integer pageSize) {
         PageHelper.startPage(page,pageSize);
+        List<ArticleCategoryListItemVO> sonsList = articleCategoryMapper.listByParentId(categoryId);
+        if (!sonsList.isEmpty()) {
+            List<ArticleAndPictureStandardVO> list = new ArrayList<>();
+            for (ArticleCategoryListItemVO sonList : sonsList) {
+                List<ArticleCategoryListItemVO> grandSonsList = articleCategoryMapper.listByParentId(sonList.getId());
+                if (!grandSonsList.isEmpty()) {
+                    for (ArticleCategoryListItemVO grandSonList : grandSonsList) {
+                        List<ArticleAndPictureStandardVO> list1 = articleMapper.listAllByCategoryId(grandSonList.getId());
+                        list.addAll(list1);
+                    }
+                } else {
+                    List<ArticleAndPictureStandardVO> list1 = articleMapper.listAllByCategoryId(sonList.getId());
+                    list.addAll(list1);
+                }
+            }
+            return JsonPage.restPage(new PageInfo<>(list));
+        }
         log.debug("开始处理【根据文章类别查询文章包含图片列表并分页】的业务");
         List<ArticleAndPictureStandardVO> list = articleMapper.listAllByCategoryId(categoryId);
+        log.debug("开始处理【根据文章类别查询文章包含图片列表并分页】的业务,查出的文章为:{}",list);
         return JsonPage.restPage(new PageInfo<>(list));
     }
 
