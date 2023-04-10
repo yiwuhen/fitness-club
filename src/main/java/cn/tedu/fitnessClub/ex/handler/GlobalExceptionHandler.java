@@ -4,7 +4,12 @@ import cn.tedu.fitnessClub.ex.ServiceException;
 import cn.tedu.fitnessClub.restful.JsonResult;
 import cn.tedu.fitnessClub.restful.ServiceCode;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.validation.BindException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -60,8 +65,8 @@ public class GlobalExceptionHandler {
         String message = stringBuilder.toString();
         return JsonResult.fail(ServiceCode.ERROR_BAD_REQUEST, message);
     }
-/*
- @ExceptionHandler({
+
+    @ExceptionHandler({
             InternalAuthenticationServiceException.class,
             BadCredentialsException.class
     })
@@ -88,7 +93,6 @@ public class GlobalExceptionHandler {
         String message = "拒绝访问，您当前登录的账号无此操作权限！";
         return JsonResult.fail(ServiceCode.ERROR_FORBIDDEN, message);
     }
- */
 
 
     // 注意：以下方法存在的意义主要在于：避免因为某个异常未被处理，导致服务器端响应500错误

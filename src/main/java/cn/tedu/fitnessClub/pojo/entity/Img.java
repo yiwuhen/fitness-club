@@ -10,5 +10,4 @@ public class Img {
     private String url;
     private String alt;
     private String href;
-
 }

@@ -9,3 +9,12 @@ spring:
 logging:
   level:
     cn.tedu.fitnessClub: trace
+
+# 当前项目的自定义配置
+fitness:
+  # JWT配置
+  jwt:
+    # 生成和解析JWT的secretKey，注意：此值应该是不易被预测的，且需要保密
+    secret-key: gfd89uiKa89J043tAFrflkji9432kjfdsajm
+    # JWT的有效时长，以分钟为单位，表现用户成功登录后，登录信息的有效时长
+    duration-in-minute: 144000

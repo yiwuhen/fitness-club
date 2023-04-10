@@ -16,6 +16,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,6 +41,7 @@ public class ArticleController {
 
     @PostMapping("/add-new")
     @ApiOperation("添加文章")
+    @PreAuthorize("hasAuthority('/add/article')")
     @ApiOperationSupport(order = 100)
     public JsonResult<Long> addNew(ArticleAddNewDTO articleAddNewDTO) {
         log.debug("开始处理【添加文章】的请求，参数：{}", articleAddNewDTO);
@@ -50,6 +52,7 @@ public class ArticleController {
     @PostMapping("/{id:[0-9]+}/delete")
     @ApiOperation("根据ID删除文章")
     @ApiOperationSupport(order = 200)
+    @PreAuthorize("hasAuthority('/delete/article')")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "文章ID", required = true, dataType = "long")
     })
@@ -61,6 +64,7 @@ public class ArticleController {
 
     @PostMapping("/{id:[0-9]+}/update")
     @ApiOperation("修改文章详情")
+    @PreAuthorize("hasAuthority('/update/article')")
     @ApiOperationSupport(order = 300)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "文章ID", required = true, dataType = "long")
