@@ -3,8 +3,6 @@ package cn.tedu.fitnessClub.service;
 import cn.tedu.fitnessClub.pojo.dto.ArticleAddNewDTO;
 import cn.tedu.fitnessClub.pojo.dto.ArticleUpdateDTO;
 import cn.tedu.fitnessClub.pojo.entity.Article;
-import cn.tedu.fitnessClub.pojo.entity.Img;
-import cn.tedu.fitnessClub.pojo.entity.OldContentImg;
 import cn.tedu.fitnessClub.pojo.vo.*;
 import cn.tedu.fitnessClub.restful.JsonPage;
 import org.springframework.transaction.annotation.Transactional;
@@ -108,18 +106,7 @@ public interface IArticleService {
      */
     JsonPage<ArticleAndPictureStandardVO> getArticleAndPictureByCategoryIdAndPage(Long categoryId, Integer page, Integer pageSize);
 
-    /**
-     * 根据文章对象，获取正文中所有img的src属性值
-     * @param article
-     * @return Img[]其中的url=正文中所有img的src属性值
-     */
-    Img[] getImgSrcByArticle(Article article);
 
-    /**
-     * 根据文章对象，获取正文中所有img属性
-     * @param article
-     * @return OldContentImg[]其中的src=正文中所有img的src属性值
-     */
-    OldContentImg[] getOldContentImgByArticle(Article article);
+
 
 }

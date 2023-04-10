@@ -59,6 +59,14 @@ public interface ArticleMapper {
     int update(Article article);
 
     /**
+     * 增加浏览量
+     *
+     * @param id 文章id
+     * @return 受影响的行数
+     */
+    int updateViewCountById(Long id);
+
+    /**
      * 统计文章数据的数量
      *
      * @return 文章数据的数量
