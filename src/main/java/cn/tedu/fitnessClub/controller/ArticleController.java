@@ -48,7 +48,7 @@ public class ArticleController {
     @ApiOperation("添加文章")
     @PreAuthorize("hasAuthority('/add/article')")
     @ApiOperationSupport(order = 100)
-    public JsonResult<Long> addNew(ArticleAddNewDTO articleAddNewDTO) {
+    public JsonResult<Long> addNew(@Validated ArticleAddNewDTO articleAddNewDTO) {
         log.debug("开始处理【添加文章】的请求，参数：{}", articleAddNewDTO);
         Long articleId = articleService.addNew(articleAddNewDTO);
         return JsonResult.ok(articleId);
@@ -75,11 +75,46 @@ public class ArticleController {
             @ApiImplicitParam(name = "id", value = "文章ID", required = true, dataType = "long")
     })
     public JsonResult<Void> updateInfoById(@PathVariable @Range(min = 1, message = "请提交有效的ID值！") Long id,
-                                           @Valid ArticleUpdateDTO articleUpdateDTO) {
+                                           @Validated ArticleUpdateDTO articleUpdateDTO) {
         log.debug("开始处理【修改文章详情】的请求，ID：{}，新数据：{}", id, articleUpdateDTO);
         articleService.updateInfoById(id, articleUpdateDTO);
         return JsonResult.ok();
     }
+
+    @GetMapping("/{id:[0-9]+}")
+    @ApiOperation("根据ID查询文章详情加将要修改的信息")
+    @ApiOperationSupport(order = 410)
+    public JsonResult<ArticleUpdateVO> getStandardById(
+            @PathVariable @Range(min = 1, message = "请提交有效的ID值！") Long id) {
+        log.debug("开始处理【根据ID查询文章详情】的请求，参数：{}", id);
+        // 根据文章id查询文章VO
+        ArticleStandardVO articleStandardVO = articleService.getStandardById(id);
+
+        // new一个article实体类用来查询OldContentImg
+        Article article = new Article();
+        BeanUtils.copyProperties(articleStandardVO,article);
+        OldContentImg[] oldContentImg = articleService.getOldContentImgByArticle(article);
+        // 准备响应给前端的oldContentImg数组
+        List<OldContentImg[]> oldContentImgList = new ArrayList<>();
+        oldContentImgList.add(oldContentImg);
+
+        // 将文章VO和oldContentImg数组打包响应给前端
+        ArticleUpdateVO articleUpdateVO = new ArticleUpdateVO();
+        articleUpdateVO.setArticleStandardVO(articleStandardVO);
+        articleUpdateVO.setOldContentImg(oldContentImgList);
+        return JsonResult.ok(articleUpdateVO);
+    }
+
+    @GetMapping("/front/{id:[0-9]+}")
+    @ApiOperation("根据ID查询文章详情")
+    @ApiOperationSupport(order = 411)
+    public JsonResult<ArticleStandardVO> getStandardByIdForFront(
+            @PathVariable @Range(min = 1, message = "请提交有效的ID值！") Long id) {
+        log.debug("开始处理【根据ID查询文章详情】的请求，参数：{}", id);
+        ArticleStandardVO queryResult = articleService.getStandardById(id);
+        return JsonResult.ok(queryResult);
+    }
+
 
     @GetMapping("/picture/{id:[0-9]+}")
     @ApiOperation("根据ID查询文章包含图片详情")

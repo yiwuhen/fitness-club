@@ -80,14 +80,20 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         String[] urls = {
                 "/doc.html",
                 "/**/*.css",
+                "/**/*.jpg",
+                "/**/*.png",
+                "/**/*.gif",
+                "/**/*.jfif",
                 "/**/*.js",
                 "/swagger-resources",
                 "/v2/api-docs",
                 "/admins/login",// 管理员登录的URL
                 "/articleCategories/{id:[0-9]+}",
-                "/articles/{id:[0-9]+}",
+                "/articles/front/{id:[0-9]+}",
                 "/articles/picture/{id:[0-9]+}",
-                "/articles//list-by-categoryIdAndPage"
+                "/articles/list-by-categoryIdAndPage",
+                "/articlePictures/upload",
+                "/articlePictures/uploadImg"
         };
 
         // 基于请求的访问控制

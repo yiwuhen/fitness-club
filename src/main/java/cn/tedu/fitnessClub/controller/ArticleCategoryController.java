@@ -15,6 +15,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,6 +45,7 @@ public class ArticleCategoryController {
     @PostMapping("/add-new")
     @ApiOperation("添加文章类别")
     @ApiOperationSupport(order = 100)
+    @PreAuthorize("hasAuthority('/articleCategory')")
     public JsonResult<Void> addNew(@Valid ArticleCategoryAddNewDTO articleCategoryAddNewDTO) {
         log.debug("开始处理【添加文章类别】的请求，参数：{}", articleCategoryAddNewDTO);
         articleCategoryService.addNew(articleCategoryAddNewDTO);
@@ -53,6 +55,7 @@ public class ArticleCategoryController {
     @PostMapping("/{id:[0-9]+}/delete")
     @ApiOperation("根据ID删除文章类别")
     @ApiOperationSupport(order = 200)
+    @PreAuthorize("hasAuthority('/articleCategory')")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "文章类别ID", required = true, dataType = "long")
     })
@@ -65,6 +68,7 @@ public class ArticleCategoryController {
     @PostMapping("/{id:[0-9]+}/enable")
     @ApiOperation("启用文章类别")
     @ApiOperationSupport(order = 310)
+    @PreAuthorize("hasAuthority('/articleCategory')")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "文章类别ID", required = true, dataType = "long")
     })
@@ -77,6 +81,7 @@ public class ArticleCategoryController {
     @PostMapping("/{id:[0-9]+}/disable")
     @ApiOperation("禁用文章类别")
     @ApiOperationSupport(order = 311)
+    @PreAuthorize("hasAuthority('/articleCategory')")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "文章类别ID", required = true, dataType = "long")
     })
@@ -89,6 +94,7 @@ public class ArticleCategoryController {
     @PostMapping("/{id:[0-9]+}/display")
     @ApiOperation("展示文章类别")
     @ApiOperationSupport(order = 312)
+    @PreAuthorize("hasAuthority('/articleCategory')")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "文章类别ID", required = true, dataType = "long")
     })
@@ -101,6 +107,7 @@ public class ArticleCategoryController {
     @PostMapping("/{id:[0-9]+}/hidden")
     @ApiOperation("不展示文章类别")
     @ApiOperationSupport(order = 313)
+    @PreAuthorize("hasAuthority('/articleCategory')")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "文章类别ID", required = true, dataType = "long")
     })
@@ -113,6 +120,7 @@ public class ArticleCategoryController {
     @PostMapping("/{id:[0-9]+}/update")
     @ApiOperation("修改文章类别详情")
     @ApiOperationSupport(order = 300)
+    @PreAuthorize("hasAuthority('/articleCategory')")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "文章类别ID", required = true, dataType = "long")
     })

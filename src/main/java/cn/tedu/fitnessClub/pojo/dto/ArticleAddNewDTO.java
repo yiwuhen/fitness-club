@@ -18,6 +18,7 @@ public class ArticleAddNewDTO implements Serializable {
     /**
      * 文章类别id
      */
+    @NotNull(message = "添加文章失败，必须选择文章类别！")
     private Long categoryId;
 
     /**

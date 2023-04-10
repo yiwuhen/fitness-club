@@ -2,6 +2,7 @@ package cn.tedu.fitnessClub.pojo.dto;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -31,6 +32,7 @@ public class ArticleUpdateDTO implements Serializable {
     /**
      * 类别id
      */
+    @NotNull(message = "添加文章失败，必须选择文章类别！")
     private Long categoryId;
 
     /**
