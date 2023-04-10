@@ -78,16 +78,6 @@ public interface IArticleService {
     List<ArticleListItemVO> list();
 
     /**
-     * 根据多个文章类别查询其文章包含图片列表并分页
-     *
-     * @param categoryIds 多个文章类别的id
-     * @param page 页码
-     * @param pageSize 每页条数
-     * @return 匹配多个文章类别并分页的文章包含图片列表
-     */
-    JsonPage<ArticleAndPictureStandardVO> getArticleAndPictureByCategoryIdsAndPage(Long[] categoryIds, Integer page, Integer pageSize);
-
-    /**
      * 分页查询文章包含图片列表
      *
      * @param page 页码
