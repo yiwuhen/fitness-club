@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -160,6 +161,7 @@ public class ArticleServiceImpl implements IArticleService {
     @Override
     public ArticleStandardVO getStandardById(Long id) {
         log.debug("开始处理【根据ID查询文章详情】的业务，参数：{}", id);
+        articleMapper.updateViewCountById(id);
         ArticleStandardVO queryResult = articleMapper.getStandardById(id);
         if (queryResult == null) {
             String message = "查询文章详情失败，文章数据不存在！";
@@ -212,10 +214,45 @@ public class ArticleServiceImpl implements IArticleService {
 
     @Override
     public JsonPage<ArticleAndPictureStandardVO> getArticleAndPictureByCategoryIdAndPage(Long categoryId, Integer page, Integer pageSize) {
-        PageHelper.startPage(page,pageSize);
+        log.debug("页码:{},每页条数{}",page,pageSize);
+        Long[] ids = getIds(categoryId);
+        log.debug("数组为:{}",ids);
         log.debug("开始处理【根据文章类别查询文章包含图片列表并分页】的业务");
-        List<ArticleAndPictureStandardVO> list = articleMapper.listAllByCategoryId(categoryId);
-        return JsonPage.restPage(new PageInfo<>(list));
+        PageHelper.startPage(page,pageSize);
+        List<ArticleAndPictureStandardVO> list = articleMapper.listAllByCategoryIds(ids);
+        log.debug("开始处理【根据文章类别查询文章包含图片列表并分页】的业务,查出的文章为:{}",list);
+        PageInfo<ArticleAndPictureStandardVO> info = new PageInfo<>(list);
+        log.debug("分页信息为:{}",info);
+        return JsonPage.restPage(info);
+    }
+
+    List<Long> listItem;
+    private void getId(List<ArticleCategoryListItemVO> list,Long categoryId) {
+        for (ArticleCategoryListItemVO categoryListItemVO : list) {
+            if (categoryListItemVO.getId()==categoryId) {
+                if (categoryListItemVO.getIsParent()==1) {
+                    for (ArticleCategoryListItemVO articleCategoryListItemVO : list) {
+                        if (articleCategoryListItemVO.getParentId()==categoryListItemVO.getId()) {
+                            getId(list,articleCategoryListItemVO.getId());
+                        }
+                    }
+                } else {
+                    listItem.add(categoryId);
+                    return;
+                }
+            }
+        }
+    }
+
+    private Long[] getIds(Long categoryId) {
+        listItem = new ArrayList<>();
+        List<ArticleCategoryListItemVO> listAll = articleCategoryMapper.list();
+        getId(listAll,categoryId);
+        Long[] array= new Long[listItem.size()];
+        for(int i=0; i<array.length;i++){
+            array[i] = listItem.get(i);
+        }
+        return array;
     }
 
 

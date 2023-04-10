@@ -81,30 +81,6 @@ public class ArticleController {
         return JsonResult.ok();
     }
 
-    @GetMapping("/{id:[0-9]+}")
-    @ApiOperation("根据ID查询文章详情")
-    @ApiOperationSupport(order = 410)
-    public JsonResult<ArticleUpdateVO> getStandardById(
-            @PathVariable @Range(min = 1, message = "请提交有效的ID值！") Long id) {
-        log.debug("开始处理【根据ID查询文章详情】的请求，参数：{}", id);
-        // 根据文章id查询文章VO
-        ArticleStandardVO articleStandardVO = articleService.getStandardById(id);
-
-        // new一个article实体类用来查询OldContentImg
-        Article article = new Article();
-        BeanUtils.copyProperties(articleStandardVO,article);
-        OldContentImg[] oldContentImg = articleService.getOldContentImgByArticle(article);
-        // 准备响应给前端的oldContentImg数组
-        List<OldContentImg[]> oldContentImgList = new ArrayList<>();
-        oldContentImgList.add(oldContentImg);
-
-        // 将文章VO和oldContentImg数组打包响应给前端
-        ArticleUpdateVO articleUpdateVO = new ArticleUpdateVO();
-        articleUpdateVO.setArticleStandardVO(articleStandardVO);
-        articleUpdateVO.setOldContentImg(oldContentImgList);
-        return JsonResult.ok(articleUpdateVO);
-    }
-
     @GetMapping("/picture/{id:[0-9]+}")
     @ApiOperation("根据ID查询文章包含图片详情")
     @ApiOperationSupport(order = 415)
