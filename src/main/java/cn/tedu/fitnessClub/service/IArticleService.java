@@ -2,9 +2,8 @@ package cn.tedu.fitnessClub.service;
 
 import cn.tedu.fitnessClub.pojo.dto.ArticleAddNewDTO;
 import cn.tedu.fitnessClub.pojo.dto.ArticleUpdateDTO;
-import cn.tedu.fitnessClub.pojo.vo.ArticleAndPictureStandardVO;
-import cn.tedu.fitnessClub.pojo.vo.ArticleListItemVO;
-import cn.tedu.fitnessClub.pojo.vo.ArticleStandardVO;
+import cn.tedu.fitnessClub.pojo.entity.Article;
+import cn.tedu.fitnessClub.pojo.vo.*;
 import cn.tedu.fitnessClub.restful.JsonPage;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,8 +33,7 @@ public interface IArticleService {
 
     /**
      * 修改文章数据
-     *
-     * @param id               被修改的文章数据的ID
+     * @param id 被修改的文章数据的ID
      * @param articleUpdateDTO 文章的新数据
      */
     void updateInfoById(Long id, ArticleUpdateDTO articleUpdateDTO);
@@ -79,18 +77,10 @@ public interface IArticleService {
      */
     List<ArticleListItemVO> list();
 
-//    /**
-//     * 根据多个categoryId查询文章包含图片列表
-//     *
-//     * @param categoryId
-//     * @return
-//     */
-//    List<ArticleAndPictureStandardVO> getArticleAndPictureByCategoryIds(Long[] categoryId);
-
     /**
      * 分页查询文章包含图片列表
      *
-     * @param page     页码
+     * @param page 页码
      * @param pageSize 每页条数
      * @return 分页的文章包含图片列表
      */
@@ -100,11 +90,13 @@ public interface IArticleService {
      * 根据文章类别查询其文章包含图片列表并分页
      *
      * @param categoryId 文章类别的id
-     * @param page       页码
-     * @param pageSize   每页条数
+     * @param page 页码
+     * @param pageSize 每页条数
      * @return 匹配文章类别并分页的文章包含图片列表
      */
     JsonPage<ArticleAndPictureStandardVO> getArticleAndPictureByCategoryIdAndPage(Long categoryId, Integer page, Integer pageSize);
+
+
 
 
 }

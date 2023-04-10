@@ -2,9 +2,12 @@ package cn.tedu.fitnessClub.controller;
 
 import cn.tedu.fitnessClub.pojo.dto.ArticleAddNewDTO;
 import cn.tedu.fitnessClub.pojo.dto.ArticleUpdateDTO;
+import cn.tedu.fitnessClub.pojo.entity.Article;
+import cn.tedu.fitnessClub.pojo.entity.OldContentImg;
 import cn.tedu.fitnessClub.pojo.vo.ArticleAndPictureStandardVO;
 import cn.tedu.fitnessClub.pojo.vo.ArticleListItemVO;
 import cn.tedu.fitnessClub.pojo.vo.ArticleStandardVO;
+import cn.tedu.fitnessClub.pojo.vo.ArticleUpdateVO;
 import cn.tedu.fitnessClub.restful.JsonPage;
 import cn.tedu.fitnessClub.restful.JsonResult;
 import cn.tedu.fitnessClub.service.IArticleService;
@@ -15,12 +18,14 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -79,11 +84,25 @@ public class ArticleController {
     @GetMapping("/{id:[0-9]+}")
     @ApiOperation("根据ID查询文章详情")
     @ApiOperationSupport(order = 410)
-    public JsonResult<ArticleStandardVO> getStandardById(
+    public JsonResult<ArticleUpdateVO> getStandardById(
             @PathVariable @Range(min = 1, message = "请提交有效的ID值！") Long id) {
         log.debug("开始处理【根据ID查询文章详情】的请求，参数：{}", id);
-        ArticleStandardVO queryResult = articleService.getStandardById(id);
-        return JsonResult.ok(queryResult);
+        // 根据文章id查询文章VO
+        ArticleStandardVO articleStandardVO = articleService.getStandardById(id);
+
+        // new一个article实体类用来查询OldContentImg
+        Article article = new Article();
+        BeanUtils.copyProperties(articleStandardVO,article);
+        OldContentImg[] oldContentImg = articleService.getOldContentImgByArticle(article);
+        // 准备响应给前端的oldContentImg数组
+        List<OldContentImg[]> oldContentImgList = new ArrayList<>();
+        oldContentImgList.add(oldContentImg);
+
+        // 将文章VO和oldContentImg数组打包响应给前端
+        ArticleUpdateVO articleUpdateVO = new ArticleUpdateVO();
+        articleUpdateVO.setArticleStandardVO(articleStandardVO);
+        articleUpdateVO.setOldContentImg(oldContentImgList);
+        return JsonResult.ok(articleUpdateVO);
     }
 
     @GetMapping("/picture/{id:[0-9]+}")
