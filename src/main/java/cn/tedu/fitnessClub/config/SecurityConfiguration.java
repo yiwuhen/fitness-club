@@ -93,7 +93,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 "/articles/picture/{id:[0-9]+}",
                 "/articles/list-by-categoryIdAndPage",
                 "/articlePictures/upload",
-                "/articlePictures/uploadImg"
+                "/articlePictures/uploadImg",
+                "/articleCategories/list-children-by-parent"
         };
 
         // 基于请求的访问控制
