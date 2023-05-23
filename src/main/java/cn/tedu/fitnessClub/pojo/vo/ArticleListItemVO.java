@@ -3,6 +3,7 @@ package cn.tedu.fitnessClub.pojo.vo;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -53,15 +54,14 @@ public class ArticleListItemVO implements Serializable {
      * 排序序号
      */
     private Integer sort;
-
     /**
      * 数据创建时间
      */
     private LocalDateTime gmtCreate;
-
     /**
      * 数据最后修改时间
      */
     private LocalDateTime gmtModified;
+
 
 }

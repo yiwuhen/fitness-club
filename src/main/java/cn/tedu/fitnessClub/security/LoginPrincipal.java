@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * 认证信息中的当事人数据
  *
- * @author java@tedu.cn
+ * @author YiWuHen
  * @version 0.0.1
  */
 @Data

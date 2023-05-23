@@ -66,6 +66,7 @@ public class ArticleServiceImpl implements IArticleService {
         Article article = new Article();
         BeanUtils.copyProperties(articleAddNewDTO, article);
         article.setCategoryName(categoryName);
+        article.setViewCount(0l);
         log.debug("即将执行插入数据，参数：{}", article);
         int rows = articleMapper.insert(article);
         if (rows != 1) {
