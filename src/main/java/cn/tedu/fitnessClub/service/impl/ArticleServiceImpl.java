@@ -29,6 +29,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author YiWuHen
+ */
 @Service
 @Slf4j
 public class ArticleServiceImpl implements IArticleService {
@@ -265,7 +268,9 @@ public class ArticleServiceImpl implements IArticleService {
 
         //new一个Img[]用于接收数据
         int imagesLength = imgTags.size();// 设置数组的容量
-        if (imagesLength == 0) return null;
+        if (imagesLength == 0) {
+            return null;
+        }
         Img[] images = new Img[imagesLength];
 
         // for循环遍历取出src
@@ -293,7 +298,9 @@ public class ArticleServiceImpl implements IArticleService {
 
         //new一个OldContentImg[]用于接收数据
         int imagesLength = imgTags.size();// 设置数组的容量
-        if (imagesLength == 0) return null;
+        if (imagesLength == 0) {
+            return null;
+        }
         OldContentImg[] oldContentImg = new OldContentImg[imagesLength];
 
         // for循环遍历取出src

@@ -38,6 +38,7 @@ public class JsonPage<T> implements Serializable {
         jsonPage.setList(pageInfo.getList());
         // 返回转换完成的对象
         return jsonPage;
+
     }
 
 

@@ -16,6 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author YiWuHen
+ */
 @RestController
 @RequestMapping("/articlePictures")
 @Api(tags = "04. 图片上传模块")
